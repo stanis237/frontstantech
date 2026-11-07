@@ -1,0 +1,174 @@
+{% extends 'admin_custom/base.html' %}
+{% block content %}
+<div style="display:grid;grid-template-columns:1fr 340px;gap:1.5rem;align-items:start;">
+  <!-- ORDER DETAILS -->
+  <div style="display:flex;flex-direction:column;gap:1.25rem;">
+    <div class="table-card">
+      <div class="table-header">
+        <h3><i data-lucide="user"></i> Informations Client</h3>
+        <div style="display:flex;gap:0.5rem;">
+          <a href="{% url 'dashboard_export_order_single_pdf' order.pk %}" class="btn btn-sm btn-primary" style="background:linear-gradient(135deg, #ef4444, #dc2626);">
+            <i data-lucide="file-text"></i> Télécharger Facture PDF
+          </a>
+          <a href="{% url 'dashboard_orders' %}" class="btn btn-outline btn-sm"><i data-lucide="arrow-left"></i> Retour</a>
+        </div>
+      </div>
+      <div style="padding:1.25rem;display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+        <div><div style="font-size:0.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Nom</div><div style="font-weight:600;">{{ order.customer_name }}</div></div>
+        <div><div style="font-size:0.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Téléphone</div><div style="font-weight:600;">{{ order.customer_phone }}</div></div>
+        <div><div style="font-size:0.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Email</div><div>{{ order.customer_email|default:"—" }}</div></div>
+        <div><div style="font-size:0.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Ville</div><div>{{ order.city }}</div></div>
+        <div style="grid-column:1/-1;"><div style="font-size:0.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Adresse de Livraison</div><div>{{ order.delivery_address }}</div></div>
+        {% if order.notes %}<div style="grid-column:1/-1;"><div style="font-size:0.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.2rem;">Notes</div><div style="font-style:italic;">{{ order.notes }}</div></div>{% endif %}
+      </div>
+    </div>
+
+    <!-- ARTICLES DÉTAILLÉS -->
+    <div class="table-card">
+      <div class="table-header"><h3><i data-lucide="shopping-cart"></i> Articles Commandés — Détails Complets</h3></div>
+      <div style="padding:1rem;">
+        {% for detail in items_detailed %}
+        <div style="display:flex;gap:1.25rem;padding:1.25rem;margin-bottom:1rem;background:var(--bg-secondary);border:1px solid var(--border);border-radius:12px;transition:box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.08)'" onmouseout="this.style.boxShadow='none'">
+          
+          <!-- Product Image -->
+          <div style="flex-shrink:0;width:110px;height:110px;border-radius:10px;overflow:hidden;background:#f1f5f9;border:1px solid var(--border);">
+            {% if detail.image_url %}
+              <img src="{{ detail.image_url }}" alt="{{ detail.item.product_name }}" style="width:100%;height:100%;object-fit:cover;">
+            {% else %}
+              <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#94a3b8;"><i data-lucide="image" style="width:32px;height:32px;"></i></div>
+            {% endif %}
+          </div>
+          
+          <!-- Product Info -->
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.4rem;flex-wrap:wrap;">
+              <h4 style="margin:0;font-size:1.05rem;color:var(--text-primary);">{{ detail.item.product_name }}</h4>
+              {% if detail.badge %}
+                <span class="badge badge-accent" style="font-size:0.65rem;padding:0.15rem 0.5rem;">{{ detail.badge }}</span>
+              {% endif %}
+              {% if detail.category %}
+                <span class="badge badge-primary" style="font-size:0.65rem;padding:0.15rem 0.5rem;">{{ detail.category }}</span>
+              {% endif %}
+            </div>
+            
+            {% if detail.description %}
+              <p style="font-size:0.82rem;color:var(--text-muted);margin:0.3rem 0 0.6rem;line-height:1.5;">{{ detail.description|truncatewords:30 }}</p>
+            {% endif %}
+            
+            <!-- Price & Quantity -->
+            <div style="display:flex;align-items:center;gap:1.5rem;margin-bottom:0.6rem;flex-wrap:wrap;">
+              <div style="font-size:0.82rem;">
+                <span style="color:var(--text-muted);">Prix unitaire :</span>
+                <strong style="color:var(--primary);margin-left:0.3rem;">{{ detail.item.price|floatformat:0 }} FCFA</strong>
+              </div>
+              <div style="font-size:0.82rem;">
+                <span style="color:var(--text-muted);">Quantité :</span>
+                <strong style="margin-left:0.3rem;">{{ detail.item.quantity }}</strong>
+              </div>
+              <div style="font-size:0.95rem;">
+                <span style="color:var(--text-muted);">Sous-total :</span>
+                <strong style="color:var(--primary);margin-left:0.3rem;font-size:1.05rem;">{{ detail.item.subtotal|floatformat:0 }} FCFA</strong>
+              </div>
+            </div>
+            
+            <!-- Specifications -->
+            {% if detail.specs %}
+              <div style="margin-top:0.5rem;padding:0.75rem 1rem;background:var(--bg-primary);border:1px solid var(--border);border-radius:8px;">
+                <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);margin-bottom:0.5rem;font-weight:600;">
+                  <i data-lucide="sliders" style="width:12px;height:12px;vertical-align:middle;"></i> Caractéristiques & Spécifications
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.3rem 1.5rem;">
+                  {% for spec in detail.specs %}
+                    <div style="display:flex;gap:0.4rem;font-size:0.78rem;padding:0.2rem 0;border-bottom:1px solid rgba(0,0,0,0.04);">
+                      <span style="color:var(--text-muted);font-weight:500;white-space:nowrap;">{{ spec.key }} :</span>
+                      <span style="color:var(--text-primary);font-weight:600;">{{ spec.value }}</span>
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+
+            <!-- Link to product -->
+            {% if detail.product_slug %}
+              <div style="margin-top:0.6rem;">
+                <a href="/boutique/produit/{{ detail.product_slug }}/" target="_blank" style="font-size:0.78rem;color:var(--primary);text-decoration:none;display:inline-flex;align-items:center;gap:0.3rem;">
+                  <i data-lucide="external-link" style="width:12px;height:12px;"></i> Voir la fiche produit complète
+                </a>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      
+      <div style="padding:1rem 1.5rem;border-top:2px solid var(--border);display:flex;justify-content:flex-end;align-items:center;gap:1rem;">
+        <span style="font-size:0.9rem;color:var(--text-muted);">TOTAL DE LA COMMANDE</span>
+        <span style="font-size:1.5rem;font-weight:800;color:var(--primary);">{{ order.total_amount|floatformat:0 }} FCFA</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR: STATUS + INFO -->
+  <div style="display:flex;flex-direction:column;gap:1.25rem;">
+    <div class="table-card">
+      <div class="table-header"><h3><i data-lucide="activity"></i> Statut de la Commande</h3></div>
+      <div style="padding:1.25rem;">
+        <div style="margin-bottom:1rem;">
+          {% if order.status == 'pending' %}<span class="badge badge-yellow" style="font-size:0.85rem;padding:0.4rem 1rem;">⏳ En attente</span>
+          {% elif order.status == 'confirmed' %}<span class="badge badge-blue" style="font-size:0.85rem;padding:0.4rem 1rem;">✅ Confirmée</span>
+          {% elif order.status == 'shipped' %}<span class="badge badge-purple" style="font-size:0.85rem;padding:0.4rem 1rem;">🚚 En livraison</span>
+          {% elif order.status == 'delivered' %}<span class="badge badge-green" style="font-size:0.85rem;padding:0.4rem 1rem;">📦 Livrée</span>
+          {% else %}<span class="badge badge-red" style="font-size:0.85rem;padding:0.4rem 1rem;">❌ Annulée</span>{% endif %}
+        </div>
+        <form method="post">
+          {% csrf_token %}
+          <div class="form-group" style="margin-bottom:0.75rem;">
+            <label style="font-size:0.8rem;font-weight:600;">Changer le statut</label>
+            <select name="status" class="form-control">
+              {% for val, label in status_choices %}
+                <option value="{{ val }}" {% if order.status == val %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;"><i data-lucide="refresh-cw"></i> Mettre à Jour</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-header"><h3><i data-lucide="info"></i> Informations</h3></div>
+      <div style="padding:1rem;">
+        <div style="display:flex;flex-direction:column;gap:0.75rem;">
+          <div style="display:flex;justify-content:space-between;font-size:0.82rem;"><span style="color:var(--text-muted);">Numéro</span><strong>{{ order.order_number }}</strong></div>
+          <div style="display:flex;justify-content:space-between;font-size:0.82rem;"><span style="color:var(--text-muted);">Date</span><span>{{ order.created_at|date:"d/m/Y à H:i" }}</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:0.82rem;"><span style="color:var(--text-muted);">Articles</span><span>{{ order.items.count }}</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:0.82rem;"><span style="color:var(--text-muted);">Total</span><strong style="color:var(--primary);">{{ order.total_amount|floatformat:0 }} FCFA</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Résumé des produits -->
+    <div class="table-card">
+      <div class="table-header"><h3><i data-lucide="list"></i> Résumé Rapide</h3></div>
+      <div style="padding:1rem;">
+        {% for detail in items_detailed %}
+        <div style="display:flex;align-items:center;gap:0.6rem;padding:0.5rem 0;{% if not forloop.last %}border-bottom:1px solid var(--border);{% endif %}">
+          <div style="width:36px;height:36px;border-radius:6px;overflow:hidden;background:#f1f5f9;flex-shrink:0;">
+            {% if detail.image_url %}
+              <img src="{{ detail.image_url }}" style="width:100%;height:100%;object-fit:cover;">
+            {% else %}
+              <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#94a3b8;"><i data-lucide="box" style="width:16px;height:16px;"></i></div>
+            {% endif %}
+          </div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:0.78rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ detail.item.product_name }}</div>
+            <div style="font-size:0.7rem;color:var(--text-muted);">{{ detail.item.quantity }}x {{ detail.item.price|floatformat:0 }} FCFA</div>
+          </div>
+          <div style="font-size:0.78rem;font-weight:700;color:var(--primary);white-space:nowrap;">{{ detail.item.subtotal|floatformat:0 }} FCFA</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
