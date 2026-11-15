@@ -1,0 +1,378 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact & Devis | STANTECH CONSULTING</title>
+  <meta name="description" content="Contactez les experts STANTECH pour vos projets IT, développement et commande de matériel.">
+  <link rel="icon" href="images/logos.png" type="image/png">
+
+  <!-- PWA & Mobile Web App Meta Tags -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#059669">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="STANTECH">
+  <link rel="apple-touch-icon" href="images/logos.png">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <script src="js/lucide.min.js"></script>
+  <script>
+    if (localStorage.getItem('stantech-theme') === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  </script>
+</head>
+
+<body>
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
+  <div id="read-progress"></div>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="container nav-wrapper">
+      <a href="index.html" class="logo" style="display:flex;align-items:center;">
+        <img src="images/logo_stantech_fond_blanc_9x16.png" alt="STANTECH Logo" style="height:44px; width:auto;" onerror="this.src='images/logo.png';">
+      </a>
+
+      <button class="mobile-toggle" aria-label="Menu">
+        <i data-lucide="menu"></i>
+      </button>
+
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-link">Accueil</a></li>
+        <li><a href="services.html" class="nav-link">Services</a></li>
+        <li><a href="realisations.html" class="nav-link">Réalisations</a></li>
+        <li><a href="applications.html" class="nav-link">Applications</a></li>
+        <li><a href="boutique.html" class="nav-link">Boutique Tech</a></li>
+        <li><a href="a-propos.html" class="nav-link">À propos</a></li>
+        <li><a href="contact.html" class="nav-link active">Contact</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="theme-toggle-btn" id="theme-toggle" title="Mode sombre / clair">
+          <i data-lucide="moon" id="theme-icon"></i>
+        </button>
+        <div class="cart-trigger" title="Voir le Panier">
+          <i data-lucide="shopping-bag"></i>
+          <span class="cart-count">0</span>
+        </div>
+        <button class="btn btn-outline" onclick="openAppModal()" style="border-radius: 999px; padding: 0.5rem 1rem; font-size: 0.85rem; border-color: rgba(16, 185, 129, 0.4); color: var(--primary);">
+          <i data-lucide="smartphone"></i> Installer l'App
+        </button>
+        <a href="contact.html" class="btn btn-primary" style="padding: 0.6rem 1.2rem; font-size: 0.88rem;">
+          Devis Gratuit
+        </a>
+      </div>
+    </div>
+
+  </header>
+
+  <main>
+    <!-- Header Banner -->
+    <section style="padding: 9rem 0 4rem; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; text-align: center;">
+      <div class="container">
+        <span class="badge badge-accent" style="margin-bottom: 1rem;">PARLONS DE VOTRE PROJET</span>
+        <h1 style="color: white; font-size: 3rem; margin-bottom: 1rem;">Contactez STANTECH</h1>
+        <p style="color: #94a3b8; max-width: 650px; margin: 0 auto; font-size: 1.1rem;">
+          Une question technologique, un projet de développement ou une demande de devis sur notre boutique ? Nos experts vous répondent sous 24h.
+        </p>
+      </div>
+    </section>
+
+    <!-- Contact & Tracking Section -->
+    <section style="padding: 5rem 0; background: var(--bg-light);">
+      <div class="container" style="display: grid; grid-template-columns: 1fr 1.3fr; gap: 4rem; align-items: start;">
+
+        <!-- Coordonnées & Suivi de commande -->
+        <div>
+          <h2 style="font-size: 2rem; color: var(--text-main); margin-bottom: 1.5rem;">Coordonnées Directes</h2>
+          <p style="color: var(--text-muted); margin-bottom: 2rem;">N'hésitez pas à nous joindre directement par téléphone, WhatsApp ou par email.</p>
+
+          <div style="display: flex; flex-direction: column; gap: 1.2rem; margin-bottom: 3rem;">
+            <div style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 1.4rem; display: flex; align-items: center; gap: 1.2rem;">
+              <div style="width: 50px; height: 50px; background: #ecfdf5; color: #059669; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <i data-lucide="map-pin"></i>
+              </div>
+              <div>
+                <strong style="color: var(--text-main); font-size: 1rem; display: block;">Bureaux & Showroom</strong>
+                <span style="color: var(--text-muted); font-size: 0.9rem;">Douala (Cameroun) & Abidjan (Côte d'Ivoire)</span>
+              </div>
+            </div>
+
+            <div style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 1.4rem; display: flex; align-items: center; gap: 1.2rem;">
+              <div style="width: 50px; height: 50px; background: #ecfdf5; color: #059669; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <i data-lucide="phone"></i>
+              </div>
+              <div>
+                <strong style="color: var(--text-main); font-size: 1rem; display: block;">Téléphone & WhatsApp</strong>
+                <span style="color: var(--text-muted); font-size: 0.9rem;">+237 674861509</span>
+              </div>
+            </div>
+
+            <div style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 1.4rem; display: flex; align-items: center; gap: 1.2rem;">
+              <div style="width: 50px; height: 50px; background: #ecfdf5; color: #059669; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <i data-lucide="mail"></i>
+              </div>
+              <div>
+                <strong style="color: var(--text-main); font-size: 1rem; display: block;">Adresse Email</strong>
+                <span style="color: var(--text-muted); font-size: 0.9rem;">contact@stantech.com</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Module Suivi de commande en ligne -->
+          <div style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.8rem; box-shadow: var(--shadow-sm);">
+            <h3 style="font-size: 1.25rem; color: var(--text-main); margin-bottom: 0.5rem;">
+              <i data-lucide="search" style="color: #059669;"></i> Suivre une Commande
+            </h3>
+            <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1rem;">
+              Entrez votre numéro de commande (ex: ST-A1B2C3D4) pour voir le statut de livraison en temps réel.
+            </p>
+            <form id="track-order-form" style="display: flex; gap: 0.5rem;">
+              <input type="text" id="track-input" class="form-control" placeholder="ST-XXXXXXXX" required style="text-transform: uppercase;">
+              <button type="submit" class="btn btn-primary" style="padding: 0.6rem 1.2rem;">
+                Suivre
+              </button>
+            </form>
+            <div id="track-result" style="margin-top: 1rem;"></div>
+          </div>
+        </div>
+
+        <!-- Formulaire de Contact -->
+        <div style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 2.5rem; box-shadow: var(--shadow-md);">
+          <h2 style="font-size: 2rem; color: var(--text-main); margin-bottom: 0.5rem;">Envoyer un Message</h2>
+          <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2rem;">Remplissez ce formulaire et un consultant STANTECH prendra contact avec vous.</p>
+
+          <form id="contact-form">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem;">
+              <div class="form-group">
+                <label>Votre Nom complet *</label>
+                <input type="text" name="name" class="form-control" placeholder="ex: Jean Dupont" required>
+              </div>
+              <div class="form-group">
+                <label>Votre Email *</label>
+                <input type="email" name="email" class="form-control" placeholder="vous@entreprise.com" required>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem;">
+              <div class="form-group">
+                <label>Numéro de Téléphone</label>
+                <input type="tel" name="phone" class="form-control" placeholder="+237 674861509">
+              </div>
+              <div class="form-group">
+                <label>Sujet du Message *</label>
+                <input type="text" name="subject" class="form-control" placeholder="ex: Devis projet IoT ou Logiciel" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Domaine ou Service Concerné</label>
+              <select name="service_interest" class="form-control">
+                <option value="Développement sur-mesure">Développement sur-mesure & Logiciel</option>
+                <option value="Infrastructure Cloud & Cybersécurité">Infrastructure Cloud & Cybersécurité</option>
+                <option value="IoT & Automatisation Industrielle">IoT & Automatisation Industrielle</option>
+                <option value="Commande Matériel Boutique">Commande Matériel / Boutique Tech</option>
+                <option value="Autre">Autre demande</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Votre Message / Détails du projet *</label>
+              <textarea name="message" class="form-control" rows="4" placeholder="Décrivez votre besoin en quelques lignes..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.05rem; margin-top: 1rem;">
+              <i data-lucide="send"></i> Envoyer le Message
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- Drawer Panier -->
+  <div class="cart-drawer-overlay">
+    <div class="cart-drawer">
+      <div class="cart-header">
+        <h3><i data-lucide="shopping-bag"></i> Mon Panier STANTECH</h3>
+        <button class="cart-close-btn">&times;</button>
+      </div>
+      <div class="cart-body"></div>
+      <div class="cart-footer">
+        <div class="cart-summary-line">
+          <span>Sous-total:</span>
+          <span class="cart-drawer-total">0 FCFA</span>
+        </div>
+        <div style="display: flex; gap: 0.8rem;">
+          <a href="panier.html" class="btn btn-outline" style="flex: 1;">Voir le Panier</a>
+          <button class="btn btn-primary" style="flex: 1;" onclick="openCheckoutModal()">Commander</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Checkout -->
+  <div class="modal-overlay" id="checkout-modal">
+    <div class="modal-content" style="max-width: 550px;">
+      <button class="modal-close" onclick="closeCheckoutModal()">&times;</button>
+      <h2 style="font-size: 1.6rem; margin-bottom: 0.5rem; color: var(--text-main);">
+        <i data-lucide="check-circle" style="color: #059669;"></i> Valider votre Commande
+      </h2>
+      <form id="checkout-form">
+        <div class="form-group">
+          <label>Nom complet *</label>
+          <input type="text" name="customer_name" class="form-control" required>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label>Téléphone *</label>
+            <input type="tel" name="customer_phone" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="customer_email" class="form-control">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Adresse de livraison *</label>
+          <input type="text" name="delivery_address" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">
+          <i data-lucide="send"></i> Confirmer la Commande
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" style="display:inline-block; margin-bottom:0.75rem;">
+            <img src="images/logo_stantech_fond_blanc_9x16.png" alt="STANTECH Logo" style="height:44px; width:auto; border-radius:6px;" onerror="this.src='images/logo.png'">
+          </a>
+          <p>L'excellence technologique au service de la transformation digitale des organisations.</p>
+        </div>
+        <div>
+          <h4 class="footer-title">Navigation</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="services.html">Nos Services</a></li>
+            <li><a href="realisations.html">Réalisations</a></li>
+            <li><a href="boutique.html">Boutique Tech</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">Entreprise</h4>
+          <ul class="footer-links">
+            <li><a href="a-propos.html">À propos</a></li>
+            <li><a href="contact.html">Nous Contacter</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">Contact</h4>
+          <ul class="footer-links" style="font-size: 0.9rem;">
+            <li><i data-lucide="map-pin" style="color: #10b981;"></i> Douala & Abidjan</li>
+            <li><i data-lucide="phone" style="color: #10b981;"></i> +237 674861509</li>
+            <li><i data-lucide="mail" style="color: #10b981;"></i> contact@stantech.com</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 STANTECH CONSULTING. Tous droits réservés.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Pré-remplir le sujet si paramètre URL (ex: ?service=...)
+      const urlParams = new URLSearchParams(window.location.search);
+      const serviceParam = urlParams.get('service');
+      if (serviceParam) {
+        const subjectInput = document.querySelector('input[name="subject"]');
+        if (subjectInput) subjectInput.value = `Demande de devis - ${serviceParam}`;
+      }
+
+      // Soumission formulaire de contact
+      const contactForm = document.getElementById('contact-form');
+      if (contactForm) {
+        contactForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const btn = contactForm.querySelector('button[type="submit"]');
+          const originalText = btn.innerHTML;
+          btn.innerHTML = '<i data-lucide="loader-2"></i> Envoi en cours...';
+          btn.disabled = true;
+          if (window.lucide) lucide.createIcons();
+
+          const formData = new FormData(contactForm);
+          const data = {
+            name: formData.get('name'),
+            email: formData.get('email'),
+            phone: formData.get('phone') || '',
+            subject: formData.get('subject'),
+            service_interest: formData.get('service_interest') || '',
+            message: formData.get('message')
+          };
+
+          try {
+            const res = await API.sendContact(data);
+            showToast(res.message || 'Message envoyé avec succès !', 'check-circle-2');
+            contactForm.reset();
+            alert('✅ Votre message a été reçu avec succès ! Un conseiller STANTECH vous recontactera sous 24h.');
+          } catch (err) {
+            showToast(err.message || 'Erreur lors de l\'envoi', 'alert-circle');
+          } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            if (window.lucide) lucide.createIcons();
+          }
+        });
+      }
+
+      // Suivi de commande
+      const trackForm = document.getElementById('track-order-form');
+      const trackResult = document.getElementById('track-result');
+      if (trackForm && trackResult) {
+        trackForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const orderNum = document.getElementById('track-input').value.trim();
+          if (!orderNum) return;
+
+          trackResult.innerHTML = '<p style="font-size:0.85rem; color:#64748b;"><i data-lucide="loader-2"></i> Recherche de la commande...</p>';
+          if (window.lucide) lucide.createIcons();
+
+          try {
+            const order = await API.trackOrder(orderNum);
+            trackResult.innerHTML = `
+              <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 10px; padding: 1rem; margin-top: 0.5rem;">
+                <div style="display:flex; justify-content:space-between; margin-bottom: 0.4rem;">
+                  <strong style="color: #059669;">${order.order_number}</strong>
+                  <span class="badge badge-primary">${order.status_display}</span>
+                </div>
+                <div style="font-size: 0.85rem; color: var(--text-main); margin-bottom: 0.3rem;">Client : ${order.customer_name}</div>
+                <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.3rem;">Total : ${API.formatPrice(order.total_amount)}</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">Date : ${order.created_at}</div>
+              </div>
+            `;
+            if (window.lucide) lucide.createIcons();
+          } catch (err) {
+            trackResult.innerHTML = `<p style="font-size:0.85rem; color:#ef4444;">${err.message}</p>`;
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>
+
