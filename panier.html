@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mon Panier & Commander | STANTECH Boutique</title>
+  <link rel="icon" href="images/logos.png" type="image/png">
+
+  <!-- CSS -->
+  <!-- PWA & Mobile Web App Meta Tags -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#059669">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="STANTECH">
+  <link rel="apple-touch-icon" href="images/logos.png">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <script src="js/lucide.min.js"></script>
+  <script>
+    if (localStorage.getItem('stantech-theme') === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  </script>
+</head>
+
+<body>
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
+  <div id="read-progress"></div>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="container nav-wrapper">
+      <a href="index.html" class="logo" style="display:flex;align-items:center;">
+        <img src="images/stantech_logo.svg" alt="STANTECH Logo" style="height:44px; width:auto;" onerror="this.src='images/logo.png';">
+      </a>
+
+      <button class="mobile-toggle" aria-label="Menu">
+        <i data-lucide="menu"></i>
+      </button>
+
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-link">Accueil</a></li>
+        <li><a href="services.html" class="nav-link">Services</a></li>
+        <li><a href="realisations.html" class="nav-link">Réalisations</a></li>
+        <li><a href="applications.html" class="nav-link">Applications</a></li>
+        <li><a href="boutique.html" class="nav-link">Boutique Tech</a></li>
+        <li><a href="a-propos.html" class="nav-link">À propos</a></li>
+        <li><a href="contact.html" class="nav-link">Contact</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="theme-toggle-btn" id="theme-toggle" title="Mode sombre / clair">
+          <i data-lucide="moon" id="theme-icon"></i>
+        </button>
+        <div class="cart-trigger" title="Voir le Panier">
+          <i data-lucide="shopping-bag"></i>
+          <span class="cart-count">0</span>
+        </div>
+        <button class="btn btn-outline" onclick="openAppModal()" style="border-radius: 999px; padding: 0.5rem 1rem; font-size: 0.85rem; border-color: rgba(16, 185, 129, 0.4); color: var(--primary);">
+          <i data-lucide="smartphone"></i> Installer l'App
+        </button>
+        <a href="contact.html" class="btn btn-primary" style="padding: 0.6rem 1.2rem; font-size: 0.88rem;">
+          Devis Gratuit
+        </a>
+      </div>
+    </div>
+  </header>
+
+
+  <main style="padding: 9rem 0 6rem; background: var(--bg-light); min-height: 80vh;">
+    <div class="container">
+      <div style="margin-bottom: 2.5rem;">
+        <h1 style="font-size: 2.5rem; color: var(--text-main); margin-bottom: 0.5rem;">Mon Panier d'Achat</h1>
+        <p style="color: var(--text-muted);">Vérifiez vos articles et renseignez vos informations de livraison ci-dessous.</p>
+      </div>
+
+      <div id="cart-content-wrapper">
+        <!-- Rempli dynamiquement par JS -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" style="display:inline-block; margin-bottom:0.75rem;">
+            <img src="images/stantech_logo.svg" alt="STANTECH Logo" style="height:42px; width:auto; filter:brightness(0) invert(1);" onerror="this.src='images/logo.png'">
+          </a>
+          <p>L'excellence technologique au service de la transformation digitale des organisations.</p>
+        </div>
+        <div>
+          <h4 class="footer-title">Navigation</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="services.html">Nos Services</a></li>
+            <li><a href="boutique.html">Boutique Tech</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">Entreprise</h4>
+          <ul class="footer-links">
+            <li><a href="a-propos.html">À propos</a></li>
+            <li><a href="contact.html">Nous Contacter</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">Contact</h4>
+          <ul class="footer-links" style="font-size: 0.9rem;">
+            <li><i data-lucide="map-pin" style="color: #10b981;"></i> Douala & Abidjan</li>
+            <li><i data-lucide="phone" style="color: #10b981;"></i> +237 674861509</li>
+            <li><i data-lucide="mail" style="color: #10b981;"></i> contact@stantech.com</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 STANTECH CONSULTING. Tous droits réservés.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    function renderCartPage() {
+      const container = document.getElementById('cart-content-wrapper');
+      const items = Cart.getItems();
+      const count = Cart.getCount();
+      const total = Cart.getTotal();
+
+      if (count === 0) {
+        container.innerHTML = `
+          <div style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 4rem 2rem; text-align: center;">
+            <i data-lucide="shopping-bag" style="width: 64px; height: 64px; color: #94a3b8; margin-bottom: 1.5rem;"></i>
+            <h2 style="font-size: 1.8rem; margin-bottom: 0.8rem; color: var(--text-main);">Votre panier est actuellement vide</h2>
+            <p style="color: var(--text-muted); margin-bottom: 2rem;">Parcourez notre boutique pour ajouter du matériel de pointe.</p>
+            <a href="boutique.html" class="btn btn-primary" style="padding: 0.8rem 2rem;">
+              <i data-lucide="shopping-bag"></i> Découvrir la Boutique
+            </a>
+          </div>
+        `;
+        if (window.lucide) lucide.createIcons();
+        return;
+      }
+
+      container.innerHTML = `
+        <div style="display: grid; grid-template-columns: 1.8fr 1.2fr; gap: 3rem; align-items: start;">
+          <!-- Table Panier -->
+          <div style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 2rem; box-shadow: var(--shadow-sm);">
+            <h3 style="font-size: 1.25rem; margin-bottom: 1.5rem; color: var(--text-main);">
+              <i data-lucide="shopping-bag" style="color: #059669;"></i> Articles sélectionnés (${count})
+            </h3>
+            
+            <table style="width: 100%; border-collapse: collapse;">
+              <thead>
+                <tr style="border-bottom: 2px solid var(--border-color); text-align: left; font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase;">
+                  <th style="padding-bottom: 1rem;">Produit</th>
+                  <th style="padding-bottom: 1rem;">Prix</th>
+                  <th style="padding-bottom: 1rem;">Quantité</th>
+                  <th style="padding-bottom: 1rem; text-align: right;">Sous-total</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${Object.entries(items).map(([id, item]) => `
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 1.2rem 0; display: flex; align-items: center; gap: 1rem;">
+                      <img src="${item.image_url}" alt="${item.name}" style="width: 60px; height: 60px; border-radius: 8px; object-fit: cover; background: #f8fafc;">
+                      <div>
+                        <strong style="color: var(--text-main); font-size: 0.95rem;">${item.name}</strong>
+                      </div>
+                    </td>
+                    <td style="padding: 1.2rem 0; font-weight: 600; font-size: 0.95rem;">${API.formatPrice(item.price)}</td>
+                    <td style="padding: 1.2rem 0;">
+                      <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <button class="qty-btn" onclick="Cart.updateQuantity('${id}', ${item.quantity - 1}); renderCartPage();">-</button>
+                        <span style="font-weight: 700; min-width: 20px; text-align: center;">${item.quantity}</span>
+                        <button class="qty-btn" onclick="Cart.updateQuantity('${id}', ${item.quantity + 1}); renderCartPage();">+</button>
+                      </div>
+                    </td>
+                    <td style="padding: 1.2rem 0; text-align: right; font-weight: 800; color: #059669; font-size: 1.05rem;">
+                      ${API.formatPrice(item.price * item.quantity)}
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Formulaire de Validation -->
+          <div style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 2rem; box-shadow: var(--shadow-md);">
+            <h3 style="font-size: 1.25rem; margin-bottom: 1.5rem; color: var(--text-main);">
+              <i data-lucide="truck" style="color: #059669;"></i> Validation de la Commande
+            </h3>
+            
+            <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 1.2rem; border-radius: 12px; margin-bottom: 1.5rem;">
+              <div style="display: flex; justify-content: space-between; font-size: 1.1rem; font-weight: 700; color: #059669;">
+                <span>Total à Payer:</span>
+                <span style="font-size: 1.4rem; font-family: var(--font-heading);">${API.formatPrice(total)}</span>
+              </div>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.4rem;">Paiement à la livraison ou par Mobile Money disponible.</p>
+            </div>
+
+            <form id="page-checkout-form">
+              <div class="form-group">
+                <label>Nom complet *</label>
+                <input type="text" name="customer_name" class="form-control" placeholder="ex: Benjamin Eteni" required>
+              </div>
+              
+              <div class="form-group">
+                <label>Numéro de Téléphone WhatsApp *</label>
+                <input type="tel" name="customer_phone" class="form-control" placeholder="+237 674861509" required>
+              </div>
+
+              <div class="form-group">
+                <label>Adresse Email (Optionnel)</label>
+                <input type="email" name="customer_email" class="form-control" placeholder="client@stantech.com">
+              </div>
+
+              <div class="form-group">
+                <label>Adresse de Livraison complète *</label>
+                <input type="text" name="delivery_address" class="form-control" placeholder="Ville, Commune, Quartier, Rue" required>
+              </div>
+
+              <div class="form-group">
+                <label>Ville</label>
+                <input type="text" name="city" class="form-control" value="Douala / Abidjan">
+              </div>
+
+              <div class="form-group">
+                <label>Notes particulières pour la livraison</label>
+                <textarea name="notes" class="form-control" rows="2" placeholder="Précisions de livraison..."></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.05rem; margin-top: 0.5rem;">
+                <i data-lucide="check-circle-2"></i> Valider et Commander Maintenant
+              </button>
+            </form>
+          </div>
+        </div>
+      `;
+
+      if (window.lucide) lucide.createIcons();
+
+      // Gestion de la soumission du formulaire
+      const form = document.getElementById('page-checkout-form');
+      if (form) {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const btn = form.querySelector('button[type="submit"]');
+          btn.innerHTML = '<i data-lucide="loader-2"></i> Validation de la commande...';
+          btn.disabled = true;
+          if (window.lucide) lucide.createIcons();
+
+          const formData = new FormData(form);
+          const orderData = {
+            customer_name: formData.get('customer_name'),
+            customer_email: formData.get('customer_email') || '',
+            customer_phone: formData.get('customer_phone'),
+            delivery_address: formData.get('delivery_address'),
+            city: formData.get('city') || 'Abidjan',
+            notes: formData.get('notes') || '',
+            items: Cart.toCheckoutPayload()
+          };
+
+          try {
+            const res = await API.submitCheckout(orderData);
+            Cart.clear();
+            renderCartPage();
+            alert(`🎉 Félicitations ${orderData.customer_name} !\n\nVotre commande a été transmise avec succès au service commercial.\nRéférence Commande : ${res.order_number}\n\nUn conseiller STANTECH vous contactera très rapidement.`);
+          } catch (err) {
+            alert('Erreur : ' + err.message);
+          } finally {
+            btn.innerHTML = '<i data-lucide="check-circle-2"></i> Valider et Commander Maintenant';
+            btn.disabled = false;
+            if (window.lucide) lucide.createIcons();
+          }
+        });
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCartPage();
+    });
+  </script>
+</body>
+</html>

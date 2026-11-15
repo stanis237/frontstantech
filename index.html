@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STANTECH | Solutions Technologiques, Ingénierie & Boutique Tech</title>
+  <meta name="description" content="STANTECH - Leader des solutions informatiques, cybersécurité, IoT industriel et boutique de matériel technologique de pointe.">
+  <meta name="keywords" content="STANTECH, solutions IT, ingénierie informatique, cybersécurité, matériel informatique, IoT industriel, boutique tech">
+  <link rel="icon" href="images/logos.png" type="image/png">
+
+  <!-- PWA & Mobile Web App Meta Tags -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#059669">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="STANTECH">
+  <link rel="apple-touch-icon" href="images/logos.png">
+
+  <!-- CSS Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <!-- Lucide Icons -->
+  <script src="js/lucide.min.js"></script>
+
+  <!-- Dark mode pre-load -->
+  <script>
+    if (localStorage.getItem('stantech-theme') === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  </script>
+</head>
+
+
+<body>
+  <!-- Curseur personnalisé -->
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- Barre de progression de lecture -->
+  <div id="read-progress"></div>
+
+  <!-- Barre d'offre limitée -->
+  <div class="countdown-bar" id="countdown-bar">
+    <span>🔥 <strong>Offre spéciale</strong> : 1ère consultation IT offerte —</span>
+    <div class="countdown-digits">
+      <span class="cd-block" id="cd-h">00</span><span class="cd-sep">:</span>
+      <span class="cd-block" id="cd-m">00</span><span class="cd-sep">:</span>
+      <span class="cd-block" id="cd-s">00</span>
+    </div>
+    <a href="contact.html">Profiter maintenant →</a>
+    <button onclick="document.getElementById('countdown-bar').style.display='none'"
+      style="background:none;border:none;color:#64748b;cursor:pointer;margin-left:0.5rem;font-size:1.1rem;">✕</button>
+  </div>
+
+  <!-- Navigation Header -->
+  <header class="navbar">
+    <div class="container nav-wrapper">
+      <a href="index.html" class="logo" style="display:flex;align-items:center;">
+        <img src="images/stantech_logo.svg" alt="STANTECH Logo" style="height:44px; width:auto;" loading="eager" onerror="this.onerror=null; this.src='images/logo.png';">
+      </a>
+
+      <button class="mobile-toggle" aria-label="Menu">
+        <i data-lucide="menu"></i>
+      </button>
+
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-link active">Accueil</a></li>
+        <li><a href="services.html" class="nav-link">Services</a></li>
+        <li><a href="realisations.html" class="nav-link">Réalisations</a></li>
+        <li><a href="applications.html" class="nav-link">Applications</a></li>
+        <li><a href="boutique.html" class="nav-link">Boutique Tech</a></li>
+        <li><a href="a-propos.html" class="nav-link">À propos</a></li>
+        <li><a href="contact.html" class="nav-link">Contact</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <!-- Toggle Dark Mode -->
+        <button class="theme-toggle-btn" id="theme-toggle" title="Mode sombre / clair">
+          <i data-lucide="moon" id="theme-icon"></i>
+        </button>
+        <div class="cart-trigger" title="Voir le Panier">
+          <i data-lucide="shopping-bag"></i>
+          <span class="cart-count">0</span>
+        </div>
+        <button class="btn btn-outline" onclick="openAppModal()" style="border-radius: 999px; padding: 0.5rem 1rem; font-size: 0.85rem; border-color: rgba(16, 185, 129, 0.4); color: var(--primary);">
+          <i data-lucide="smartphone"></i> Installer l'App
+        </button>
+        <a href="contact.html" class="btn btn-primary" style="padding: 0.6rem 1.2rem; font-size: 0.88rem;">
+          Devis Gratuit
+        </a>
+      </div>
+    </div>
+  </header>
+
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero-section reveal">
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <span class="badge badge-primary" style="margin-bottom: 1.2rem;">
+            <i data-lucide="sparkles"></i> L'EXCELLENCE TECHNOLOGIQUE SANS COMPROMIS
+          </span>
+          <h1>Innover. Automatiser. <span>Propulser</span> votre Entreprise.</h1>
+          <p>STANTECH accompagne la transformation digitale des organisations grâce à des solutions logicielles sur-mesure, des infrastructures Cloud sécurisées, des systèmes IoT industriels et une boutique spécialisée en matériel de haute technologie.</p>
+
+          <div class="hero-cta" style="flex-wrap: wrap; gap: 1rem;">
+            <a href="services.html" class="btn btn-primary">
+              Nos Services <i data-lucide="arrow-right"></i>
+            </a>
+            <a href="contact.html" class="btn btn-outline">
+              <i data-lucide="send"></i> Demander un Devis
+            </a>
+            <a href="boutique.html" class="btn btn-outline"
+              style="background: rgba(16, 185, 129, 0.05); border-color: var(--primary-light); color: var(--primary-light);">
+              <i data-lucide="shopping-bag"></i> Boutique Tech
+            </a>
+          </div>
+
+          <div class="hero-stats">
+            <div class="stat-item">
+              <h3 class="count-up">99.9%</h3>
+              <p>Disponibilité Serveurs</p>
+            </div>
+            <div class="stat-item">
+              <h3 class="count-up">120+</h3>
+              <p>Projets Livrés</p>
+            </div>
+            <div class="stat-item">
+              <h3 class="count-up">5 ans</h3>
+              <p>D'Expérience</p>
+            </div>
+            <div class="stat-item">
+              <h3 class="count-up">98%</h3>
+              <p>Clients Satisfaits</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-image-wrapper">
+          <div class="hero-card-main">
+            <img src="images/ma photo.png" alt="STANTECH Tech Innovation" onerror="this.src='images/logos.png'">
+          </div>
+
+          <div class="floating-glass-card">
+            <div class="floating-icon">
+              <i data-lucide="shield-check"></i>
+            </div>
+            <div>
+              <strong style="font-size: 0.95rem; color: #0f172a;">Sécurité & IoT Intégré</strong>
+              <p style="font-size: 0.8rem; color: #64748b;">Infrastructure 100% Opérationnelle</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Partenaires -->
+    <section class="partners-slider-section reveal">
+      <div class="container">
+        <p class="partners-title">ILS FONT CONFIANCE À L'EXPERTISE STANTECH</p>
+        <div class="partners-slider-container">
+          <div class="partners-slider-track">
+            <div class="partner-logo"><i data-lucide="cloud"></i> <span>Microsoft</span></div>
+            <div class="partner-logo"><i data-lucide="shield"></i> <span>Cisco</span></div>
+            <div class="partner-logo"><i data-lucide="cpu"></i> <span>Intel</span></div>
+            <div class="partner-logo"><i data-lucide="server"></i> <span>Huawei</span></div>
+            <div class="partner-logo"><i data-lucide="hard-drive"></i> <span>Dell</span></div>
+            <div class="partner-logo"><i data-lucide="database"></i> <span>Oracle</span></div>
+            <div class="partner-logo"><i data-lucide="cloud"></i> <span>Microsoft</span></div>
+            <div class="partner-logo"><i data-lucide="shield"></i> <span>Cisco</span></div>
+            <div class="partner-logo"><i data-lucide="cpu"></i> <span>Intel</span></div>
+            <div class="partner-logo"><i data-lucide="server"></i> <span>Huawei</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Vedettes -->
+    <section class="services-section reveal">
+      <div class="container">
+        <div class="section-header">
+          <span class="badge badge-primary">NOS DOMAINES D'EXPERTISE</span>
+          <h2>Services d'Ingénierie & IT</h2>
+          <p>Des solutions clé en main développées par nos experts pour répondre aux défis stratégiques de votre organisation.</p>
+        </div>
+
+        <div class="services-grid" id="featured-services-container">
+          <div style="grid-column: 1 / -1; text-align: center; padding: 2rem;">
+            <i data-lucide="loader-2" class="spin" style="width: 32px; height: 32px; color: var(--primary);"></i>
+            <p style="color: #64748b; margin-top: 0.5rem;">Chargement des services...</p>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 3rem;">
+          <a href="services.html" class="btn btn-outline">
+            Voir tous nos services <i data-lucide="arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Produits Vedettes Boutique -->
+    <section class="shop-section reveal" style="padding: 5rem 0; background: var(--bg-light);">
+      <div class="container">
+        <div class="section-header">
+          <span class="badge badge-primary">BOUTIQUE OFFICIELLE</span>
+          <h2>Équipements & Matériel High-Tech</h2>
+          <p>Découvrez notre sélection de serveurs, passerelles IoT et stations de travail certifiées.</p>
+        </div>
+
+        <div class="products-grid" id="featured-products-container">
+          <div style="grid-column: 1 / -1; text-align: center; padding: 2rem;">
+            <i data-lucide="loader-2" class="spin" style="width: 32px; height: 32px; color: var(--primary);"></i>
+            <p style="color: #64748b; margin-top: 0.5rem;">Chargement des produits...</p>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 3rem;">
+          <a href="boutique.html" class="btn btn-primary" style="padding: 0.8rem 2rem;">
+            Accéder à toute la boutique <i data-lucide="shopping-bag"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Réalisations Vedettes -->
+    <section class="realizations-section reveal" style="padding: 5rem 0;">
+      <div class="container">
+        <div class="section-header">
+          <span class="badge badge-primary">PORTFOLIO & SUCCÈS</span>
+          <h2>Projets Récents</h2>
+          <p>Des réalisations concrètes livrées avec succès pour nos clients.</p>
+        </div>
+
+        <div class="portfolio-grid" id="featured-realizations-container">
+          <!-- Chargé dynamiquement via API -->
+        </div>
+
+        <div style="text-align: center; margin-top: 3rem;">
+          <a href="realisations.html" class="btn btn-outline">
+            Explorer nos réalisations <i data-lucide="arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Applications & SaaS -->
+    <section class="applications-section reveal" style="padding: 5rem 0; background: var(--card-bg);">
+      <div class="container">
+        <div class="section-header">
+          <span class="badge badge-accent">SUITE LOGICIELLE</span>
+          <h2>Applications & Plateformes SaaS</h2>
+          <p>Nos applications web, mobiles et cloud conçues pour accélérer vos processus.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 2rem;" id="featured-applications-container">
+          <!-- Chargé dynamiquement via API -->
+        </div>
+
+        <div style="text-align: center; margin-top: 3rem;">
+          <a href="applications.html" class="btn btn-primary">
+            Voir toutes les applications <i data-lucide="grid"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bannière Télécharger l'Application -->
+    <section style="padding: 5rem 0; background: linear-gradient(135deg, #059669 0%, #047857 100%); color: white;">
+      <div class="container" style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 3rem; align-items: center;">
+        <div>
+          <span class="badge badge-dark" style="margin-bottom: 1rem;">NOUVEAU</span>
+          <h2 style="font-size: 2.4rem; color: white; margin-bottom: 1rem;">Emportez STANTECH Partout avec Vous</h2>
+          <p style="color: #ecfdf5; font-size: 1.1rem; line-height: 1.7; margin-bottom: 2rem;">
+            Installez notre Web App ultra-rapide sur votre smartphone (Android & iPhone) ou téléchargez l'application officielle Android pour commander votre matériel et suivre vos projets en temps réel.
+          </p>
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <button class="btn btn-outline" onclick="openAppModal()" style="background: white; color: #047857; border-color: white; font-weight: 700; padding: 0.85rem 1.8rem;">
+              <i data-lucide="download-cloud"></i> Installer la Web App (PWA)
+            </button>
+            <button class="btn btn-outline" onclick="openAppModal()" style="background: rgba(0,0,0,0.25); color: white; border-color: rgba(255,255,255,0.4); padding: 0.85rem 1.8rem;">
+              <i data-lucide="smartphone"></i> Application Android (APK)
+            </button>
+          </div>
+        </div>
+        <div style="text-align: center;">
+          <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.2); border-radius: 24px; padding: 2.5rem 2rem; display: inline-block;">
+            <div style="width: 80px; height: 80px; border-radius: 20px; background: white; margin: 0 auto 1.2rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0,0,0,0.15);">
+              <img src="images/logo.png" alt="STANTECH App" style="width: 52px; height: 52px; object-fit: contain;">
+            </div>
+            <h3 style="color: white; font-size: 1.3rem; margin-bottom: 0.4rem;">STANTECH Mobile</h3>
+            <p style="color: #d1fae5; font-size: 0.88rem; margin-bottom: 1.2rem;">Disponible sur Web, Android & iOS</p>
+            <button class="btn btn-primary" onclick="openAppModal()" style="background: white; color: #059669; border: none; width: 100%;">
+              Obtenir l'App Gratuitement
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bannière CTA -->
+    <section class="cta-section">
+
+      <div class="container">
+        <div class="cta-box">
+          <h2>Prêt à Transformer votre Infrastructure ?</h2>
+          <p>Contactez nos ingénieurs dès aujourd'hui pour un audit gratuit et un devis sur-mesure.</p>
+          <a href="contact.html" class="btn btn-primary" style="padding: 0.9rem 2.2rem;">
+            Démarrer un Projet <i data-lucide="arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Slide-Over Cart Drawer -->
+  <div class="cart-drawer-overlay">
+    <div class="cart-drawer">
+      <div class="cart-header">
+        <h3><i data-lucide="shopping-bag"></i> Mon Panier STANTECH</h3>
+        <button class="cart-close-btn">&times;</button>
+      </div>
+      <div class="cart-body"></div>
+      <div class="cart-footer">
+        <div class="cart-summary-line">
+          <span>Sous-total:</span>
+          <span class="cart-drawer-total">0 FCFA</span>
+        </div>
+        <div style="display: flex; gap: 0.8rem;">
+          <a href="panier.html" class="btn btn-outline" style="flex: 1;">Voir le Panier</a>
+          <button class="btn btn-primary" style="flex: 1;" onclick="openCheckoutModal()">Commander</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick View Modal -->
+  <div class="modal-overlay" id="quickview-modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="document.getElementById('quickview-modal').classList.remove('active')">&times;</button>
+      <div class="modal-body-content"></div>
+    </div>
+  </div>
+
+  <!-- Checkout Modal -->
+  <div class="modal-overlay" id="checkout-modal">
+    <div class="modal-content" style="max-width: 550px;">
+      <button class="modal-close" onclick="closeCheckoutModal()">&times;</button>
+      <h2 style="font-size: 1.6rem; margin-bottom: 0.5rem; color: var(--text-main);">
+        <i data-lucide="check-circle" style="color: #059669;"></i> Valider votre Commande
+      </h2>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
+        Remplissez vos coordonnées pour la livraison rapide de votre matériel.
+      </p>
+
+      <form id="checkout-form">
+        <div class="form-group">
+          <label>Nom complet *</label>
+          <input type="text" name="customer_name" class="form-control" placeholder="ex: Benjamin Eteni" required>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label>Téléphone WhatsApp *</label>
+            <input type="tel" name="customer_phone" class="form-control" placeholder="+237 674861509" required>
+          </div>
+          <div class="form-group">
+            <label>Email (Optionnel)</label>
+            <input type="email" name="customer_email" class="form-control" placeholder="client@stantech.com">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Adresse de livraison *</label>
+          <input type="text" name="delivery_address" class="form-control" placeholder="Ville, Quartier, Rue" required>
+        </div>
+        <div class="form-group">
+          <label>Ville</label>
+          <input type="text" name="city" class="form-control" value="Douala / Abidjan">
+        </div>
+        <div class="form-group">
+          <label>Notes (Optionnel)</label>
+          <textarea name="notes" class="form-control" rows="2" placeholder="Indications spécifiques pour la livraison..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">
+          <i data-lucide="send"></i> Confirmer la Commande
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" style="display:inline-block; margin-bottom:0.75rem;">
+            <img src="images/stantech_logo.svg" alt="STANTECH Logo" style="height:42px; width:auto; filter:brightness(0) invert(1);" onerror="this.src='images/logo.png'">
+          </a>
+          <p><strong>STANTECH CONSULTING</strong> — Une idée, une solution numérique intelligente qui répond à votre besoin. Conception de solutions technologiques, développement et infrastructures au Cameroun et à l'international.</p>
+        </div>
+
+        <div>
+          <h4 class="footer-title">Navigation</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="services.html">Nos Services</a></li>
+            <li><a href="realisations.html">Réalisations</a></li>
+            <li><a href="applications.html">Applications</a></li>
+            <li><a href="boutique.html">Boutique Matériel</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-title">Entreprise</h4>
+          <ul class="footer-links">
+            <li><a href="a-propos.html">À propos de STANTECH</a></li>
+            <li><a href="contact.html">Nous Contacter</a></li>
+            <li><a href="panier.html">Mon Panier</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-title">Contact & Support</h4>
+          <ul class="footer-links" style="font-size: 0.9rem;">
+            <li style="display: flex; gap: 0.5rem; align-items: center;"><i data-lucide="map-pin" style="color: #10b981;"></i> Douala & Abidjan</li>
+            <li style="display: flex; gap: 0.5rem; align-items: center;"><i data-lucide="phone" style="color: #10b981;"></i> +237 674861509</li>
+            <li style="display: flex; gap: 0.5rem; align-items: center;"><i data-lucide="mail" style="color: #10b981;"></i> contact@stantech.com</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 STANTECH CONSULTING. Tous droits réservés.</p>
+        <p>Déployé sur Vercel avec API Django découplée.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- WhatsApp Floating Button -->
+  <a href="https://wa.me/237674861509?text=Bonjour%20STANTECH%2C%20je%20souhaite%20obtenir%20des%20informations%20sur%20vos%20services."
+    id="whatsapp-btn" target="_blank" rel="noopener" title="Discuter sur WhatsApp">
+    <div class="whatsapp-tooltip">💬 Discuter sur WhatsApp</div>
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+    </svg>
+  </a>
+
+  <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // Chargement dynamique des données de la page d'accueil via API
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const homeData = await API.getHomeData();
+
+        // 1. Services
+        const servContainer = document.getElementById('featured-services-container');
+        if (servContainer && homeData.featured_services) {
+          if (homeData.featured_services.length === 0) {
+            servContainer.innerHTML = '<p style="text-align:center; grid-column:1/-1;">Aucun service en avant.</p>';
+          } else {
+            servContainer.innerHTML = homeData.featured_services.map(s => `
+              <div class="service-card">
+                <div class="service-icon">
+                  <i data-lucide="${s.icon || 'cpu'}"></i>
+                </div>
+                <h3>${s.title}</h3>
+                <p>${s.short_description}</p>
+                ${s.features_list && s.features_list.length > 0 ? `
+                  <ul class="service-features-list">
+                    ${s.features_list.slice(0, 3).map(f => `<li><i data-lucide="check-circle-2"></i> ${f}</li>`).join('')}
+                  </ul>
+                ` : ''}
+                <a href="services.html" class="btn btn-outline" style="margin-top: auto; padding: 0.5rem 1rem; font-size: 0.85rem;">
+                  En savoir plus <i data-lucide="chevron-right"></i>
+                </a>
+              </div>
+            `).join('');
+          }
+        }
+
+        // 2. Produits
+        const prodContainer = document.getElementById('featured-products-container');
+        if (prodContainer && homeData.featured_products) {
+          if (homeData.featured_products.length === 0) {
+            prodContainer.innerHTML = '<p style="text-align:center; grid-column:1/-1;">Aucun produit en avant.</p>';
+          } else {
+            prodContainer.innerHTML = homeData.featured_products.map(p => `
+              <div class="product-card">
+                ${p.badge ? `<span class="badge badge-accent product-badge-tag">${p.badge}</span>` : ''}
+                <div class="product-image">
+                  <img src="${API.normalizeImageUrl(p.image_url)}" alt="${p.name}">
+                  <button class="product-quick-view" onclick="openQuickView('${p.slug}')" title="Aperçu">
+                    <i data-lucide="eye"></i>
+                  </button>
+                </div>
+                <div class="product-body">
+                  <span class="product-category">${p.category_name || 'Matériel'}</span>
+                  <h3 class="product-title">
+                    <a href="produit.html?slug=${p.slug}">${p.name}</a>
+                  </h3>
+                  <div class="product-rating">
+                    <i data-lucide="star" style="fill: #f59e0b; width: 14px; height: 14px;"></i>
+                    <strong>${p.rating}</strong>
+                    <span>(${p.reviews_count} avis)</span>
+                  </div>
+                  <p class="product-desc">${p.short_description || ''}</p>
+                  <div class="product-footer">
+                    <div class="price-box">
+                      <span class="price-current">${API.formatPrice(p.current_price || p.price)}</span>
+                    </div>
+                    <button class="btn-add-cart" onclick='Cart.addItem(${JSON.stringify(p)})'>
+                      <i data-lucide="shopping-bag"></i> Ajouter
+                    </button>
+                  </div>
+                </div>
+              </div>
+            `).join('');
+          }
+        }
+
+        // 3. Réalisations
+        const realContainer = document.getElementById('featured-realizations-container');
+        if (realContainer && homeData.featured_realizations) {
+          realContainer.innerHTML = homeData.featured_realizations.map(r => `
+            <div class="portfolio-card">
+              <div class="portfolio-img">
+                <img src="${API.normalizeImageUrl(r.image_url)}" alt="${r.title}">
+                <div class="portfolio-overlay">
+                  <span class="badge badge-accent">${r.category_name || 'Projet Réalisé'}</span>
+                </div>
+              </div>
+              <div class="portfolio-content" style="padding: 1.8rem;">
+                <span style="font-size: 0.8rem; font-weight: 700; color: #059669;">CLIENT : ${r.client_name || 'Partenaire'}</span>
+                <h3 style="font-size: 1.35rem; margin: 0.5rem 0 0.8rem; color: var(--text-main);">${r.title}</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.2rem;">${r.short_description}</p>
+                ${r.tech_tags ? `
+                  <div class="tech-tags">
+                    ${r.tech_tags.map(t => `<span class="tag">${t}</span>`).join('')}
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+          `).join('');
+        }
+
+        // 4. Applications
+        const appContainer = document.getElementById('featured-applications-container');
+        if (appContainer && homeData.featured_applications) {
+          appContainer.innerHTML = homeData.featured_applications.map(a => `
+            <div style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius-lg); overflow: hidden; display: flex; flex-direction: column;">
+              <div style="height: 180px; overflow: hidden; background: #0f172a; position: relative;">
+                <img src="${API.normalizeImageUrl(a.image_url)}" alt="${a.title}" style="width: 100%; height: 100%; object-fit: cover;">
+                <span class="badge badge-accent" style="position: absolute; top: 1rem; left: 1rem;">${a.platform_display || 'App'}</span>
+              </div>
+              <div style="padding: 1.5rem; display: flex; flex-direction: column; flex: 1;">
+                <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-main);">${a.title}</h3>
+                <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; margin-bottom: 1.2rem; flex: 1;">${a.short_description}</p>
+                <div style="display: flex; gap: 0.5rem; margin-top: auto;">
+                  ${a.demo_url ? `<a href="${a.demo_url}" target="_blank" class="btn btn-primary" style="flex:1; padding:0.5rem; font-size:0.85rem;"><i data-lucide="external-link"></i> Démo</a>` : ''}
+                  ${a.download_url ? `<a href="${a.download_url}" target="_blank" class="btn btn-outline" style="flex:1; padding:0.5rem; font-size:0.85rem;"><i data-lucide="download"></i> Télécharger</a>` : ''}
+                </div>
+              </div>
+            </div>
+          `).join('');
+        }
+
+        if (window.lucide) lucide.createIcons();
+      } catch (e) {
+        console.warn('API non joignable immédiatement, affichage hors ligne ou développement.', e);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nos Applications & Solutions Logicielles | STANTECH</title>
+  <meta name="description" content="Découvrez l'écosystème d'applications web, mobiles et SaaS créées par STANTECH.">
+  <link rel="icon" href="images/logos.png" type="image/png">
+
+  <!-- PWA & Mobile Web App Meta Tags -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#059669">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="STANTECH">
+  <link rel="apple-touch-icon" href="images/logos.png">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <script src="js/lucide.min.js"></script>
+  <script>
+    if (localStorage.getItem('stantech-theme') === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  </script>
+</head>
+
+<body>
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
+  <div id="read-progress"></div>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="container nav-wrapper">
+      <a href="index.html" class="logo" style="display:flex;align-items:center;">
+        <img src="images/stantech_logo.svg" alt="STANTECH Logo" style="height:44px; width:auto;" onerror="this.src='images/logo.png';">
+      </a>
+
+      <button class="mobile-toggle" aria-label="Menu">
+        <i data-lucide="menu"></i>
+      </button>
+
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-link">Accueil</a></li>
+        <li><a href="services.html" class="nav-link">Services</a></li>
+        <li><a href="realisations.html" class="nav-link">Réalisations</a></li>
+        <li><a href="applications.html" class="nav-link active">Applications</a></li>
+        <li><a href="boutique.html" class="nav-link">Boutique Tech</a></li>
+        <li><a href="a-propos.html" class="nav-link">À propos</a></li>
+        <li><a href="contact.html" class="nav-link">Contact</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="theme-toggle-btn" id="theme-toggle" title="Mode sombre / clair">
+          <i data-lucide="moon" id="theme-icon"></i>
+        </button>
+        <div class="cart-trigger" title="Voir le Panier">
+          <i data-lucide="shopping-bag"></i>
+          <span class="cart-count">0</span>
+        </div>
+        <button class="btn btn-outline" onclick="openAppModal()" style="border-radius: 999px; padding: 0.5rem 1rem; font-size: 0.85rem; border-color: rgba(16, 185, 129, 0.4); color: var(--primary);">
+          <i data-lucide="smartphone"></i> Installer l'App
+        </button>
+        <a href="contact.html" class="btn btn-primary" style="padding: 0.6rem 1.2rem; font-size: 0.88rem;">
+          Devis Gratuit
+        </a>
+      </div>
+    </div>
+
+  </header>
+
+  <main>
+    <!-- Header Banner -->
+    <section style="padding: 9rem 0 4rem; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; text-align: center;">
+      <div class="container">
+        <span class="badge badge-accent" style="margin-bottom: 1rem;">SUITE LOGICIELLE & APPLICATIONS</span>
+        <h1 style="color: white; font-size: 3rem; margin-bottom: 1rem;">Nos Applications & Plateformes SaaS</h1>
+        <p style="color: #94a3b8; max-width: 700px; margin: 0 auto; font-size: 1.1rem; line-height: 1.7;">
+          Découvrez l'écosystème d'applications web, mobiles et SaaS développées par les ingénieurs STANTECH. Des solutions innovantes, performantes et immédiatement déployables.
+        </p>
+      </div>
+    </section>
+
+    <!-- Filter & Showcase Section -->
+    <section style="padding: 4rem 0 6rem; background: var(--bg-light);">
+      <div class="container">
+        <!-- Filter Bar -->
+        <div style="display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 3.5rem;" id="platform-filters">
+          <button class="btn btn-primary platform-btn" data-platform="" style="border-radius: 999px; padding: 0.5rem 1.4rem;">
+            <i data-lucide="grid"></i> Toutes les Apps
+          </button>
+          <button class="btn btn-outline platform-btn" data-platform="web" style="border-radius: 999px; padding: 0.5rem 1.4rem;">
+            <i data-lucide="globe"></i> Web Apps
+          </button>
+          <button class="btn btn-outline platform-btn" data-platform="mobile" style="border-radius: 999px; padding: 0.5rem 1.4rem;">
+            <i data-lucide="smartphone"></i> Mobile (iOS/Android)
+          </button>
+          <button class="btn btn-outline platform-btn" data-platform="saas" style="border-radius: 999px; padding: 0.5rem 1.4rem;">
+            <i data-lucide="cloud"></i> SaaS
+          </button>
+          <button class="btn btn-outline platform-btn" data-platform="desktop" style="border-radius: 999px; padding: 0.5rem 1.4rem;">
+            <i data-lucide="monitor"></i> Desktop
+          </button>
+          <button class="btn btn-outline platform-btn" data-platform="ai" style="border-radius: 999px; padding: 0.5rem 1.4rem;">
+            <i data-lucide="cpu"></i> IA & Data
+          </button>
+        </div>
+
+        <!-- Applications Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2rem;" id="apps-grid">
+          <div style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+            <i data-lucide="loader-2" class="spin" style="width: 36px; height: 36px; color: var(--primary);"></i>
+            <p style="color: #64748b; margin-top: 1rem;">Chargement des applications...</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Drawer Panier -->
+  <div class="cart-drawer-overlay">
+    <div class="cart-drawer">
+      <div class="cart-header">
+        <h3><i data-lucide="shopping-bag"></i> Mon Panier STANTECH</h3>
+        <button class="cart-close-btn">&times;</button>
+      </div>
+      <div class="cart-body"></div>
+      <div class="cart-footer">
+        <div class="cart-summary-line">
+          <span>Sous-total:</span>
+          <span class="cart-drawer-total">0 FCFA</span>
+        </div>
+        <div style="display: flex; gap: 0.8rem;">
+          <a href="panier.html" class="btn btn-outline" style="flex: 1;">Voir le Panier</a>
+          <button class="btn btn-primary" style="flex: 1;" onclick="openCheckoutModal()">Commander</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Checkout -->
+  <div class="modal-overlay" id="checkout-modal">
+    <div class="modal-content" style="max-width: 550px;">
+      <button class="modal-close" onclick="closeCheckoutModal()">&times;</button>
+      <h2 style="font-size: 1.6rem; margin-bottom: 0.5rem; color: var(--text-main);">
+        <i data-lucide="check-circle" style="color: #059669;"></i> Valider votre Commande
+      </h2>
+      <form id="checkout-form">
+        <div class="form-group">
+          <label>Nom complet *</label>
+          <input type="text" name="customer_name" class="form-control" required>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label>Téléphone *</label>
+            <input type="tel" name="customer_phone" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="customer_email" class="form-control">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Adresse de livraison *</label>
+          <input type="text" name="delivery_address" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Ville</label>
+          <input type="text" name="city" class="form-control" value="Douala / Abidjan">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">
+          <i data-lucide="send"></i> Confirmer la Commande
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" style="display:inline-block; margin-bottom:0.75rem;">
+            <img src="images/stantech_logo.svg" alt="STANTECH Logo" style="height:42px; width:auto; filter:brightness(0) invert(1);" onerror="this.src='images/logo.png'">
+          </a>
+          <p>L'excellence technologique au service de la transformation digitale des organisations.</p>
+        </div>
+        <div>
+          <h4 class="footer-title">Navigation</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="services.html">Nos Services</a></li>
+            <li><a href="realisations.html">Réalisations</a></li>
+            <li><a href="boutique.html">Boutique Tech</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">Entreprise</h4>
+          <ul class="footer-links">
+            <li><a href="a-propos.html">À propos</a></li>
+            <li><a href="contact.html">Nous Contacter</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">Contact</h4>
+          <ul class="footer-links" style="font-size: 0.9rem;">
+            <li><i data-lucide="map-pin" style="color: #10b981;"></i> Douala & Abidjan</li>
+            <li><i data-lucide="phone" style="color: #10b981;"></i> +237 674861509</li>
+            <li><i data-lucide="mail" style="color: #10b981;"></i> contact@stantech.com</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 STANTECH CONSULTING. Tous droits réservés.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    async function loadApps(platform = '') {
+      const container = document.getElementById('apps-grid');
+      try {
+        const apps = await API.getApplications('', platform);
+        if (!apps || apps.length === 0) {
+          container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #64748b;">Aucune application trouvée pour cette catégorie.</p>';
+        } else {
+          container.innerHTML = apps.map(app => `
+            <div style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); transition: var(--transition); display: flex; flex-direction: column;">
+              <div style="position: relative; height: 210px; overflow: hidden; background: #0f172a;">
+                <img src="${API.normalizeImageUrl(app.image_url)}" alt="${app.title}" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.9;">
+                <div style="position: absolute; top: 1rem; left: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                  <span class="badge badge-accent">${app.platform_display || 'App'}</span>
+                  ${app.badge ? `<span class="badge badge-dark">${app.badge}</span>` : ''}
+                </div>
+                <div style="position: absolute; bottom: 0.75rem; right: 1rem; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(6px); color: #10b981; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 6px;">
+                  ${app.version || 'v1.0'}
+                </div>
+              </div>
+              <div style="padding: 1.8rem; display: flex; flex-direction: column; flex: 1;">
+                <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                  <div style="width: 38px; height: 38px; border-radius: 10px; background: var(--primary-soft); color: var(--primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i data-lucide="${app.icon || 'layout'}" style="width: 20px; height: 20px;"></i>
+                  </div>
+                  <h3 style="font-size: 1.3rem; font-weight: 700; margin: 0; color: var(--text-main);">${app.title}</h3>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.94rem; line-height: 1.6; margin-bottom: 1.5rem; flex: 1;">
+                  ${app.short_description}
+                </p>
+                ${app.tech_tags && app.tech_tags.length > 0 ? `
+                  <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem;">
+                    ${app.tech_tags.map(tech => `
+                      <span style="font-size: 0.72rem; font-weight: 600; background: rgba(16, 185, 129, 0.1); color: var(--primary); border: 1px solid rgba(16, 185, 129, 0.2); padding: 0.2rem 0.6rem; border-radius: 6px;">
+                        ${tech}
+                      </span>
+                    `).join('')}
+                  </div>
+                ` : ''}
+                <div style="display: flex; gap: 0.75rem; margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                  ${app.demo_url ? `<a href="${app.demo_url}" target="_blank" class="btn btn-primary" style="flex: 1; padding: 0.65rem 1rem; font-size: 0.85rem;"><i data-lucide="external-link"></i> Démo</a>` : ''}
+                  ${app.download_url ? `<a href="${API.normalizeImageUrl(app.download_url)}" target="_blank" class="btn btn-outline" style="flex: 1; padding: 0.65rem 1rem; font-size: 0.85rem;"><i data-lucide="download"></i> Télécharger</a>` : ''}
+                </div>
+              </div>
+            </div>
+          `).join('');
+        }
+        if (window.lucide) lucide.createIcons();
+      } catch (err) {
+        container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #ef4444;">Erreur lors du chargement des applications.</p>';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.platform-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.platform-btn').forEach(b => b.className = 'btn btn-outline platform-btn');
+          btn.className = 'btn btn-primary platform-btn';
+          loadApps(btn.dataset.platform);
+        });
+      });
+      loadApps();
+    });
+  </script>
+</body>
+</html>
