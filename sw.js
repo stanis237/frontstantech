@@ -22,7 +22,7 @@ const ASSETS_TO_CACHE = [
   './js/lucide.min.js',
   './images/logo.png',
   './images/logos.png',
-  './images/stantech_logo.svg'
+  './images/logo_stantech_fond_blanc_9x16.png'
 ];
 
 // Installation : Mise en cache des ressources statiques
