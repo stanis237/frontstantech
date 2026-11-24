@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
@@ -38,10 +38,6 @@
         <img src="images/logo_stantech_fond_blanc_9x16.png" alt="STANTECH Logo" style="height:44px; width:auto;" onerror="this.src='images/logo.png';">
       </a>
 
-      <button class="mobile-toggle" aria-label="Menu">
-        <i data-lucide="menu"></i>
-      </button>
-
       <ul class="nav-menu">
         <li><a href="index.html" class="nav-link">Accueil</a></li>
         <li><a href="services.html" class="nav-link">Services</a></li>
@@ -60,12 +56,11 @@
           <i data-lucide="shopping-bag"></i>
           <span class="cart-count">0</span>
         </div>
-        <button class="btn btn-outline" onclick="openAppModal()" style="border-radius: 999px; padding: 0.5rem 1rem; font-size: 0.85rem; border-color: rgba(16, 185, 129, 0.4); color: var(--primary);">
-          <i data-lucide="smartphone"></i> Installer l'App
+
+        <!-- Bouton Menu Mobile (proche du panier) -->
+        <button class="mobile-toggle" aria-label="Menu" title="Menu de navigation">
+          <i data-lucide="menu"></i>
         </button>
-        <a href="contact.html" class="btn btn-primary" style="padding: 0.6rem 1.2rem; font-size: 0.88rem;">
-          Devis Gratuit
-        </a>
       </div>
     </div>
 
@@ -80,6 +75,11 @@
         <p style="color: #ecfdf5; max-width: 650px; margin: 0 auto; font-size: 1.1rem;">
           Commandez en ligne vos serveurs, passerelles IoT, stations de travail et équipements réseau certifiés avec garantie constructeur.
         </p>
+        <div style="margin-top: 1.5rem;">
+          <a href="#order-tracking" class="btn btn-outline" style="border-color: white; color: white; padding: 0.7rem 1.5rem; font-size: 0.95rem;" onclick="event.preventDefault(); document.getElementById('order-tracking')?.scrollIntoView({behavior:'smooth'}) || (window.location.href='index.html#order-tracking');">
+            <i data-lucide="package-search"></i> Suivi de Commande
+          </a>
+        </div>
       </div>
     </section>
 
@@ -228,6 +228,8 @@
 
     async function loadProducts() {
       const container = document.getElementById('shop-products-grid');
+      container.innerHTML = API.getProductSkeletons(8);
+
       try {
         const products = await API.getProducts({
           category: currentCategory,
@@ -238,17 +240,22 @@
           container.innerHTML = `
             <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 1rem;">
               <i data-lucide="package-x" style="width: 60px; height: 60px; color: #94a3b8; margin-bottom: 1rem;"></i>
-              <h3>Aucun produit trouvé</h3>
-              <p style="color: #64748b;">Essayez une autre recherche ou réinitialisez les filtres.</p>
+              <h3 style="color: var(--text-main);">Aucun produit trouvé</h3>
+              <p style="color: var(--text-muted); margin-top: 0.4rem;">Essayez une autre recherche ou réinitialisez les filtres.</p>
             </div>
           `;
         } else {
-          container.innerHTML = products.map(p => `
+          container.innerHTML = products.map(p => {
+            const hasDiscount = p.discount_price && parseFloat(p.discount_price) > 0;
+            const discountPct = hasDiscount ? Math.round(((p.price - p.discount_price) / p.price) * 100) : 0;
+            const currentPrice = hasDiscount ? p.discount_price : p.price;
+
+            return `
             <div class="product-card">
-              ${p.badge ? `<span class="badge badge-accent product-badge-tag">${p.badge}</span>` : ''}
+              ${hasDiscount ? `<span class="badge badge-accent product-badge-tag" style="background:#ef4444; color:white;">-${discountPct}%</span>` : (p.badge ? `<span class="badge badge-accent product-badge-tag">${p.badge}</span>` : '')}
               
               <div class="product-image">
-                <img src="${API.normalizeImageUrl(p.image_url)}" alt="${p.name}">
+                <img src="${API.normalizeImageUrl(p.image_url)}" alt="${p.name}" loading="lazy">
                 <button class="product-quick-view" onclick="openQuickView('${p.slug}')" title="Aperçu rapide">
                   <i data-lucide="eye"></i>
                 </button>
@@ -272,27 +279,46 @@
                   <i data-lucide="check-circle" style="width: 14px; height: 14px;"></i> Stock disponible (${p.stock} unités)
                 </div>
 
-                <div class="product-footer">
-                  <div class="price-box">
-                    ${p.discount_price && parseFloat(p.discount_price) > 0 ? `
-                      <span class="price-current">${API.formatPrice(p.discount_price)}</span>
-                      <span class="price-old">${API.formatPrice(p.price)}</span>
-                    ` : `
-                      <span class="price-current">${API.formatPrice(p.price)}</span>
-                    `}
+                <div class="product-footer" style="flex-direction: column; align-items: stretch; gap: 0.8rem;">
+                  <div class="price-box" style="flex-direction: row; justify-content: space-between; align-items: baseline;">
+                    <div>
+                      <span class="price-current">${API.formatPrice(currentPrice)}</span>
+                      ${hasDiscount ? `<span class="price-old" style="margin-left: 0.5rem;">${API.formatPrice(p.price)}</span>` : ''}
+                    </div>
                   </div>
 
-                  <button class="btn-add-cart" onclick='Cart.addItem(${JSON.stringify(p)})'>
-                    <i data-lucide="shopping-bag"></i> Ajouter
-                  </button>
+                  <div style="display: flex; gap: 0.5rem;">
+                    <button class="btn-add-cart" style="flex: 1; justify-content: center;" onclick='Cart.addItem(${JSON.stringify(p).replace(/'/g, "&#39;")})'>
+                      <i data-lucide="shopping-bag" style="width:16px;height:16px;"></i> Ajouter
+                    </button>
+                    <a href="${API.getWhatsAppOrderUrl(p.name, API.formatPrice(currentPrice))}" target="_blank" rel="noopener noreferrer" class="btn-whatsapp-order" title="Commander directement via WhatsApp">
+                      <i data-lucide="message-circle" style="width:16px;height:16px;"></i> WhatsApp
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
-          `).join('');
+          `;
+          }).join('');
         }
         if (window.lucide) lucide.createIcons();
       } catch (err) {
-        container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #ef4444;">Erreur lors du chargement des produits.</p>';
+        container.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 3rem 1rem; background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border-color);">
+            <i data-lucide="server-off" style="width: 44px; height: 44px; color: #ef4444; margin-bottom: 1rem;"></i>
+            <h3 style="margin-bottom: 0.5rem; color: var(--text-main);">Connexion au catalogue</h3>
+            <p style="color: var(--text-muted); max-width: 480px; margin: 0 auto 1.5rem;">Le serveur sécurisé STANTECH est en cours d'initialisation. Vous pouvez réessayer ou commander directement via WhatsApp.</p>
+            <div style="display:flex; justify-content:center; gap: 1rem; flex-wrap: wrap;">
+              <button onclick="loadProducts()" class="btn btn-primary">
+                <i data-lucide="refresh-cw"></i> Réessayer
+              </button>
+              <a href="https://wa.me/237674861509?text=${encodeURIComponent('Bonjour STANTECH, je souhaite consulter votre catalogue de matériel disponible.')}" target="_blank" class="btn-whatsapp-order">
+                <i data-lucide="message-circle"></i> Demander sur WhatsApp
+              </a>
+            </div>
+          </div>
+        `;
+        if (window.lucide) lucide.createIcons();
       }
     }
 
@@ -349,4 +375,6 @@
   </script>
 </body>
 </html>
+
+
 

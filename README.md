@@ -1,55 +1,65 @@
-# 🚀 STANTECH - Frontend Découplé (Prêt pour Vercel)
+# 🌐 STANTECH CONSULTING - Frontend statique Vercel
 
-Ce dossier `frontend/` contient l'ensemble du site web STANTECH sous forme d'application frontend statique moderne et réactive, totalement découplée du backend Django.
-
----
-
-## 📁 Structure du Frontend
-
-- `index.html` : Page d'accueil dynamique avec stats animées et sections vedettes (Services, Produits, Réalisations, Apps).
-- `services.html` : Catalogue des services d'ingénierie avec filtres par catégorie.
-- `realisations.html` : Portfolio des projets réalisés avec tags technologiques.
-- `applications.html` : Suite d'applications SaaS, web et mobile avec liens démo et téléchargement direct.
-- `boutique.html` : Boutique e-commerce complète avec filtres de catégories, recherche instantanée et ajout au panier.
-- `produit.html` : Fiche détaillée d'un produit avec images, spécifications techniques et sélection de quantité.
-- `panier.html` : Page complète du panier avec calcul dynamique des totaux et formulaire de validation de commande.
-- `a-propos.html` : Présentation de STANTECH, vision, mission et valeurs.
-- `contact.html` : Formulaire de contact direct et outil de suivi de commande en temps réel (`ST-XXXX`).
-- `css/` : Feuilles de style complètes et responsive (`style.css`, `responsive.css`).
-- `js/` :
-  - `config.js` : Configuration de l'URL du Backend Django.
-  - `api.js` : Client centralisé pour communiquer avec les endpoints REST du backend et gestionnaire de panier (`localStorage`).
-  - `main.js` : Contrôleur UI (menu responsive, mode sombre, panier tiroir, modals, notifications toasts).
-  - `lucide.min.js` : Librairie d'icônes SVG.
-- `images/` : Logos, visuels et icônes.
-- `vercel.json` : Configuration optimisée pour Vercel (URLs propres sans extension `.html`, en-têtes de sécurité et cache).
+Ce dossier `frontend/` contient l'application web frontend moderne et réactive de **STANTECH CONSULTING**, totalement découplée du backend Python et optimisée pour un hébergement statique à haute performance (Vercel, Netlify, Cloudflare Pages, GitHub Pages).
 
 ---
 
-## 🌐 Déploiement sur Vercel (En 2 minutes)
+## 📂 Structure du Frontend
 
-### Option 1 : Déploiement via le CLI Vercel
-1. Ouvrez un terminal dans le dossier `frontend` :
-   ```bash
-   cd frontend
-   npx vercel
-   ```
-2. Suivez les étapes à l'écran (choisissez les réglages par défaut).
-
-### Option 2 : Déploiement via GitHub / Tableau de bord Vercel
-1. Poussez ce dossier sur votre compte GitHub (soit dans un dépôt dédié au frontend, soit en définissant **Root Directory** = `frontend` dans les paramètres de votre projet Vercel).
-2. Cliquez sur **Import** sur [vercel.com](https://vercel.com).
-3. Cliquez sur **Deploy** !
+```
+frontend/
+├── index.html            # Page d'accueil dynamique avec stats animées et sections vedettes
+├── a-propos.html         # Présentation officielle (fondateur, vision, 6 pôles d'expertise, SEO)
+├── services.html         # Catalogue des services d'ingénierie avec filtres interactifs
+├── realisations.html     # Portfolio des projets réalisés avec tags technologiques
+├── applications.html     # Suite d'applications SaaS, web et mobile (Démo, Téléchargement, Doc)
+├── boutique.html         # Boutique e-commerce complète avec filtres et ajout au panier
+├── produit.html          # Fiche détaillée produit dynamique avec spécifications
+├── panier.html           # Page de commande avec validation et calcul des totaux
+├── contact.html          # Formulaire de contact / devis et outil de suivi de commande (ST-XXXX)
+├── css/
+│   ├── style.css         # Thème premium (Vert émeraude & Blanc, mode sombre/clair)
+│   └── responsive.css    # Règles responsives pour mobile, tablette et desktop
+├── js/
+│   ├── config.js         # Configuration de l'URL du Backend Django
+│   ├── api.js            # Client API REST unifié et gestionnaire de panier (CartManager)
+│   ├── main.js           # Contrôleur d'interface utilisateur (menu, dark mode, modals, toasts)
+│   └── lucide.min.js     # Icônes vectorielles SVG
+├── images/               # Logos officiels, visuels et photos
+├── manifest.json         # Manifeste PWA pour installation sur mobile
+├── sw.js                 # Service Worker pour mise en cache hors-ligne
+└── vercel.json           # Routage Vercel avec URLs propres sans extension .html
+```
 
 ---
 
 ## 🔗 Connecter le Frontend au Backend
 
-Dans `frontend/js/config.js`, modifiez la variable `PRODUCTION_BACKEND_URL` avec l'URL où est hébergé votre Django :
+Dans [`frontend/js/config.js`](js/config.js) :
 
 ```javascript
-const PRODUCTION_BACKEND_URL = 'https://votre-backend-django.onrender.com';
+// Backend Django déployé indépendamment sur PythonAnywhere
+const PRODUCTION_BACKEND_URL = 'https://stantechbackend.pythonanywhere.com';
 ```
 
-- En local (`localhost`), le frontend communique automatiquement avec `http://127.0.0.1:8000`.
-- Une fois en ligne sur Vercel, il communique automatiquement avec votre backend de production.
+* **En développement local (`localhost`)** : Le frontend se connecte automatiquement à `http://127.0.0.1:8000`.
+* **En production sur Vercel** : Le frontend interroge l'API PythonAnywhere définie dans `PRODUCTION_BACKEND_URL`. Le bouton d'administration ouvre `/dashboard/login/` sur le backend.
+* **Test rapide sans redéploiement** : Vous pouvez tester n'importe quel backend en ajoutant `?api=https://url-du-backend.com` dans la barre d'adresse de votre navigateur.
+
+---
+
+## 🚀 Déploiement du Frontend sur Vercel (Gratuit)
+
+### Déploiement via le tableau de bord Vercel
+1. Rendez-vous sur [vercel.com](https://vercel.com) et connectez votre compte GitHub.
+2. Cliquez sur **Add New...** -> **Project**.
+3. Importez votre dépôt GitHub `siteofficielstantech`.
+4. Sélectionnez le dépôt `stanis237/frontstantech`. Comme ce dépôt contient directement les fichiers du frontend, gardez sa racine comme **Root Directory**.
+5. Laissez le framework sur **Other**, sans commande de build, puis déployez le site statique.
+
+### Option 2 : Déploiement via CLI Vercel
+```bash
+cd frontend
+npx vercel
+```
+Suivez les instructions simples à l'écran en acceptant les options par défaut.

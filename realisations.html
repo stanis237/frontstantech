@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
@@ -38,10 +38,6 @@
         <img src="images/logo_stantech_fond_blanc_9x16.png" alt="STANTECH Logo" style="height:44px; width:auto;" onerror="this.src='images/logo.png';">
       </a>
 
-      <button class="mobile-toggle" aria-label="Menu">
-        <i data-lucide="menu"></i>
-      </button>
-
       <ul class="nav-menu">
         <li><a href="index.html" class="nav-link">Accueil</a></li>
         <li><a href="services.html" class="nav-link">Services</a></li>
@@ -60,12 +56,11 @@
           <i data-lucide="shopping-bag"></i>
           <span class="cart-count">0</span>
         </div>
-        <button class="btn btn-outline" onclick="openAppModal()" style="border-radius: 999px; padding: 0.5rem 1rem; font-size: 0.85rem; border-color: rgba(16, 185, 129, 0.4); color: var(--primary);">
-          <i data-lucide="smartphone"></i> Installer l'App
+
+        <!-- Bouton Menu Mobile (proche du panier) -->
+        <button class="mobile-toggle" aria-label="Menu" title="Menu de navigation">
+          <i data-lucide="menu"></i>
         </button>
-        <a href="contact.html" class="btn btn-primary" style="padding: 0.6rem 1.2rem; font-size: 0.88rem;">
-          Devis Gratuit
-        </a>
       </div>
     </div>
 
@@ -214,15 +209,17 @@
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
       const container = document.getElementById('realizations-grid');
+      container.innerHTML = API.getRealisationSkeletons(4);
+
       try {
         const list = await API.getRealisations();
         if (!list || list.length === 0) {
-          container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #64748b;">Aucune réalisation enregistrée pour le moment.</p>';
+          container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 3rem;">Aucune réalisation enregistrée pour le moment.</p>';
         } else {
           container.innerHTML = list.map(real => `
             <div class="portfolio-card">
               <div class="portfolio-img">
-                <img src="${API.normalizeImageUrl(real.image_url)}" alt="${real.title}">
+                <img src="${API.normalizeImageUrl(real.image_url)}" alt="${real.title}" loading="lazy">
                 <div class="portfolio-overlay">
                   <span class="badge badge-accent">${real.category_name || 'Ingénierie STANTECH'}</span>
                 </div>
@@ -241,23 +238,43 @@
                     ${real.tech_tags.map(t => `<span class="tag">${t}</span>`).join('')}
                   </div>
                 ` : ''}
-                ${real.project_url ? `
-                  <div style="margin-top: 1.2rem;">
-                    <a href="${real.project_url}" target="_blank" class="btn btn-outline" style="padding: 0.4rem 0.9rem; font-size: 0.8rem;">
-                      Visiter le Projet <i data-lucide="external-link"></i>
+                <div style="display: flex; gap: 0.6rem; margin-top: 1.4rem; flex-wrap: wrap;">
+                  ${real.project_url ? `
+                    <a href="${real.project_url}" target="_blank" class="btn btn-outline" style="padding: 0.45rem 1rem; font-size: 0.85rem;">
+                      Visiter le Projet <i data-lucide="external-link" style="width:14px;height:14px;"></i>
                     </a>
-                  </div>
-                ` : ''}
+                  ` : ''}
+                  <a href="${API.getWhatsAppServiceUrl('Projet similaire à ' + real.title)}" target="_blank" class="btn-whatsapp-order" style="padding: 0.45rem 0.9rem; font-size: 0.82rem;">
+                    <i data-lucide="message-circle" style="width:14px;height:14px;"></i> Projet Similaire
+                  </a>
+                </div>
               </div>
             </div>
           `).join('');
         }
         if (window.lucide) lucide.createIcons();
       } catch (e) {
-        container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #ef4444;">Erreur lors du chargement des réalisations.</p>';
+        container.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 3rem 1rem; background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border-color);">
+            <i data-lucide="server-off" style="width: 44px; height: 44px; color: #ef4444; margin-bottom: 1rem;"></i>
+            <h3 style="margin-bottom: 0.5rem; color: var(--text-main);">Connexion au serveur</h3>
+            <p style="color: var(--text-muted); max-width: 480px; margin: 0 auto 1.5rem;">Le serveur STANTECH est en cours d'initialisation. Vous pouvez échanger directement avec nous.</p>
+            <div style="display:flex; justify-content:center; gap: 1rem; flex-wrap: wrap;">
+              <button onclick="window.location.reload()" class="btn btn-primary">
+                <i data-lucide="refresh-cw"></i> Réessayer
+              </button>
+              <a href="https://wa.me/237674861509?text=${encodeURIComponent('Bonjour STANTECH, je souhaite découvrir vos réalisations et études de cas.')}" target="_blank" class="btn-whatsapp-order">
+                <i data-lucide="message-circle"></i> Échanger sur WhatsApp
+              </a>
+            </div>
+          </div>
+        `;
+        if (window.lucide) lucide.createIcons();
       }
     });
   </script>
 </body>
 </html>
+
+
 
