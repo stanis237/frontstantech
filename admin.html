@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administration STANTECH</title>
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <script src="js/lucide.min.js"></script>
+  <script src="js/config.js"></script>
+</head>
+<body class="admin-app">
+  <div id="admin-login" class="admin-login-screen">
+    <form id="admin-login-form" class="admin-login-card">
+      <img src="images/logo_stantech_fond_blanc_9x16.png" alt="STANTECH" class="admin-login-logo">
+      <h1>Administration</h1>
+      <p>Réservée aux super-administrateurs</p>
+      <div id="admin-login-error" class="admin-alert" hidden></div>
+      <label>Nom d'utilisateur
+        <input id="admin-username" class="admin-input" name="username" autocomplete="username" required>
+      </label>
+      <label>Mot de passe
+        <input id="admin-password" class="admin-input" name="password" type="password" autocomplete="current-password" required>
+      </label>
+      <button class="admin-primary-button" type="submit">Se connecter</button>
+    </form>
+  </div>
+
+  <div id="admin-shell" class="admin-shell" hidden>
+    <aside class="admin-sidebar">
+      <div class="admin-brand">
+        <img src="images/logo_stantech_fond_blanc_9x16.png" alt="STANTECH">
+        <span>Administration</span>
+      </div>
+      <nav class="admin-nav">
+        <button class="admin-nav-item active" data-view="dashboard"><i data-lucide="layout-dashboard"></i><span>Tableau de bord</span></button>
+        <button class="admin-nav-item" data-view="products"><i data-lucide="shopping-bag"></i><span>Produits</span></button>
+        <button class="admin-nav-item" data-view="services"><i data-lucide="briefcase"></i><span>Services</span></button>
+        <button class="admin-nav-item" data-view="realisations"><i data-lucide="layers"></i><span>Réalisations</span></button>
+        <button class="admin-nav-item" data-view="applications"><i data-lucide="layout-grid"></i><span>Applications</span></button>
+        <button class="admin-nav-item" data-view="categories"><i data-lucide="folder-tree"></i><span>Catégories</span></button>
+        <button class="admin-nav-item" data-view="orders"><i data-lucide="package"></i><span>Commandes</span></button>
+        <button class="admin-nav-item" data-view="invoices"><i data-lucide="receipt"></i><span>Factures</span></button>
+        <button class="admin-nav-item" data-view="messages"><i data-lucide="mail"></i><span>Messages</span></button>
+      </nav>
+      <button id="admin-logout" class="admin-logout"><i data-lucide="log-out"></i><span>Déconnexion</span></button>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-topbar">
+        <button id="admin-menu-toggle" class="admin-menu-toggle" aria-label="Menu"><i data-lucide="menu"></i></button>
+        <div>
+          <span class="admin-eyebrow">Espace sécurisé</span>
+          <h2 id="admin-view-title">Tableau de bord</h2>
+        </div>
+        <a href="index.html" class="admin-site-link" target="_blank"><i data-lucide="external-link"></i> Voir le site</a>
+      </header>
+      <section id="admin-content" class="admin-content">
+        <div class="admin-loader">Chargement…</div>
+      </section>
+    </main>
+  </div>
+
+  <div id="admin-modal" class="admin-modal" hidden>
+    <div class="admin-modal-card">
+      <button id="admin-modal-close" class="admin-modal-close" aria-label="Fermer">&times;</button>
+      <h2 id="admin-modal-title"></h2>
+      <form id="admin-modal-form"></form>
+    </div>
+  </div>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>

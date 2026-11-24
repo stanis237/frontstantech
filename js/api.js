@@ -20,7 +20,119 @@ const API = {
     return new Intl.NumberFormat('fr-FR').format(num) + ' FCFA';
   },
 
-  // Requête générique avec gestion d'erreurs
+  // Bannière d'état API discrète (pour le réveil sur serveurs gratuits comme Render)
+  showApiStatus(message, isSuccess = false) {
+    let banner = document.getElementById('api-status-banner');
+    if (!banner) {
+      banner = document.createElement('div');
+      banner.id = 'api-status-banner';
+      banner.className = 'api-status-banner';
+      document.body.appendChild(banner);
+    }
+    banner.className = isSuccess ? 'api-status-banner visible success' : 'api-status-banner visible';
+    banner.innerHTML = `<i data-lucide="${isSuccess ? 'check-circle' : 'loader-2'}" class="${isSuccess ? '' : 'spin'}" style="width:16px;height:16px;"></i> <span>${message}</span>`;
+    if (window.lucide) lucide.createIcons();
+    if (isSuccess) {
+      setTimeout(() => {
+        banner.classList.remove('visible');
+      }, 2500);
+    }
+  },
+
+  hideApiStatus() {
+    const banner = document.getElementById('api-status-banner');
+    if (banner) banner.classList.remove('visible');
+  },
+
+  // Générateur de lien WhatsApp de commande directe
+  getWhatsAppOrderUrl(productName, price) {
+    const phone = (window.STANTECH_CONFIG && window.STANTECH_CONFIG.WHATSAPP_RAW) || '237674861509';
+    const text = `Bonjour STANTECH CONSULTING, je souhaite commander : *${productName}* (${price}). Est-il immédiatement disponible pour livraison ?`;
+    return `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+  },
+
+  // Générateur de lien WhatsApp pour demande de devis service
+  getWhatsAppServiceUrl(serviceTitle) {
+    const phone = (window.STANTECH_CONFIG && window.STANTECH_CONFIG.WHATSAPP_RAW) || '237674861509';
+    const text = `Bonjour STANTECH CONSULTING, je souhaite solliciter un devis pour votre prestation : *${serviceTitle}*. Pouvons-nous échanger ?`;
+    return `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+  },
+
+  // --- Helpers de Skeleton Loaders modernes ---
+  getServiceSkeletons(count = 3) {
+    let html = '';
+    for (let i = 0; i < count; i++) {
+      html += `
+        <div class="skeleton-card" style="padding: 2.5rem 2rem;">
+          <div class="skeleton" style="width: 60px; height: 60px; border-radius: 12px; margin-bottom: 1rem;"></div>
+          <div class="skeleton skeleton-title"></div>
+          <div class="skeleton skeleton-line" style="margin-top: 0.5rem;"></div>
+          <div class="skeleton skeleton-line"></div>
+          <div class="skeleton skeleton-line short"></div>
+          <div class="skeleton skeleton-btn" style="margin-top: 2rem;"></div>
+        </div>
+      `;
+    }
+    return html;
+  },
+
+  getProductSkeletons(count = 4) {
+    let html = '';
+    for (let i = 0; i < count; i++) {
+      html += `
+        <div class="skeleton-card">
+          <div class="skeleton skeleton-thumb"></div>
+          <div class="skeleton" style="width: 40%; height: 16px;"></div>
+          <div class="skeleton skeleton-title"></div>
+          <div class="skeleton skeleton-line"></div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top: auto; padding-top: 1rem;">
+            <div class="skeleton" style="width: 45%; height: 24px;"></div>
+            <div class="skeleton" style="width: 35%; height: 36px; border-radius: 8px;"></div>
+          </div>
+        </div>
+      `;
+    }
+    return html;
+  },
+
+  getRealisationSkeletons(count = 3) {
+    let html = '';
+    for (let i = 0; i < count; i++) {
+      html += `
+        <div class="skeleton-card" style="padding: 0; overflow: hidden;">
+          <div class="skeleton" style="width: 100%; height: 220px; border-radius: 0;"></div>
+          <div style="padding: 1.5rem; display: flex; flex-direction: column; gap: 0.8rem;">
+            <div class="skeleton" style="width: 35%; height: 16px;"></div>
+            <div class="skeleton skeleton-title"></div>
+            <div class="skeleton skeleton-line"></div>
+            <div class="skeleton skeleton-line short"></div>
+          </div>
+        </div>
+      `;
+    }
+    return html;
+  },
+
+  getApplicationSkeletons(count = 3) {
+    let html = '';
+    for (let i = 0; i < count; i++) {
+      html += `
+        <div class="skeleton-card">
+          <div class="skeleton" style="width: 50px; height: 50px; border-radius: 12px;"></div>
+          <div class="skeleton skeleton-title"></div>
+          <div class="skeleton skeleton-line"></div>
+          <div class="skeleton skeleton-line short"></div>
+          <div style="display: flex; gap: 0.5rem; margin-top: auto;">
+            <div class="skeleton" style="flex: 1; height: 38px;"></div>
+            <div class="skeleton" style="flex: 1; height: 38px;"></div>
+          </div>
+        </div>
+      `;
+    }
+    return html;
+  },
+
+  // Requête générique avec gestion douce des cold-starts et erreurs
   async request(endpoint, options = {}) {
     const url = `${this.baseUrl}${endpoint}`;
     const defaultHeaders = {
@@ -36,15 +148,25 @@ const API = {
       }
     };
 
+    // Alerte douce si la requête met plus de 2.2 secondes (serveur en sommeil)
+    let slowTimer = setTimeout(() => {
+      this.showApiStatus('Connexion au serveur sécurisé STANTECH... (mise en route)', false);
+    }, 2200);
+
     try {
       const response = await fetch(url, config);
+      clearTimeout(slowTimer);
+      this.hideApiStatus();
+
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.message || data.detail || 'Une erreur est survenue.');
       }
       return data;
     } catch (error) {
-      console.error(`Erreur API (${endpoint}):`, error);
+      clearTimeout(slowTimer);
+      this.hideApiStatus();
+      console.warn(`API (${endpoint}) injoignable ou temporairement indisponible:`, error);
       throw error;
     }
   },
@@ -180,6 +302,13 @@ const Cart = {
 
     this.saveItems(items);
     showToast(`${product.name} ajouté au panier !`, 'shopping-bag');
+
+    // Animation bump sur les compteurs du panier
+    document.querySelectorAll('.cart-count').forEach(el => {
+      el.classList.remove('bump');
+      void el.offsetWidth; // trigger reflow
+      el.classList.add('bump');
+    });
 
     // Ouvre le drawer du panier
     const drawer = document.querySelector('.cart-drawer-overlay');
