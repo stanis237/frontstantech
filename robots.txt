@@ -1,0 +1,51 @@
+# ============================================================
+# robots.txt — STANTECH CONSULTING
+# https://www.stantechconsulting.site/
+# ============================================================
+
+# Autoriser tous les robots d'indexation
+User-agent: *
+Allow: /
+
+# Bloquer les fichiers d'administration et les assets non pertinents
+Disallow: /admin.html
+Disallow: /js/admin.js
+Disallow: /css/admin.css
+Disallow: /panier.html
+Disallow: /sw.js
+
+# Bloquer les fichiers de configuration
+Disallow: /manifest.json
+Disallow: /vercel.json
+Disallow: /_redirects
+
+# Googlebot spécifique — autoriser tout le contenu public
+User-agent: Googlebot
+Allow: /
+Allow: /images/
+Disallow: /admin.html
+Disallow: /panier.html
+
+# Googlebot-Image — autoriser les images
+User-agent: Googlebot-Image
+Allow: /images/
+
+# Bingbot
+User-agent: Bingbot
+Allow: /
+Disallow: /admin.html
+Disallow: /panier.html
+
+# Crawl-delay pour les bots moins prioritaires
+User-agent: Yandex
+Crawl-delay: 5
+Allow: /
+Disallow: /admin.html
+
+User-agent: Baiduspider
+Crawl-delay: 10
+Allow: /
+Disallow: /admin.html
+
+# Sitemap
+Sitemap: https://www.stantechconsulting.site/sitemap.xml

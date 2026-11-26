@@ -14,7 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initPWA();
   initAppModal();
   initFloatingActions();
-  initApkNotificationBanner();
+  // initApkNotificationBanner(); // Remplacé par le chatbot
+  initChatbot();
   initScrollReveal();
 
   if (window.lucide) {
@@ -145,21 +146,7 @@ function initFloatingActions() {
     </svg>
   `;
 
-  // 3. Bouton Flottant Installer l'App / APK
-  const apkBtn = document.createElement('button');
-  apkBtn.id = 'apk-float-btn';
-  apkBtn.className = 'floating-action-btn';
-  apkBtn.title = "Installer l'Application STANTECH (APK & Web App)";
-  apkBtn.setAttribute('aria-label', "Installer l'application");
-  apkBtn.innerHTML = `
-    <div class="apk-tooltip">📱 Installer l'App / APK</div>
-    <i data-lucide="smartphone"></i>
-  `;
-  apkBtn.addEventListener('click', () => {
-    openAppModal();
-  });
-
-  // 4. Bouton Admin Discret
+  // 3. Bouton Admin Discret (ancien #4)
   const adminBtn = document.createElement('a');
   adminBtn.id = 'admin-secret-btn';
   adminBtn.className = 'floating-action-btn';
@@ -170,10 +157,9 @@ function initFloatingActions() {
   adminBtn.setAttribute('aria-label', 'Administration');
   adminBtn.innerHTML = `<i data-lucide="shield-check"></i>`;
 
-  // Assemblage dans le conteneur (Scroll-Top -> WhatsApp -> APK -> Admin)
+  // Assemblage dans le conteneur (Scroll-Top -> WhatsApp -> Admin)
   container.appendChild(scrollTopBtn);
   container.appendChild(whatsappBtn);
-  container.appendChild(apkBtn);
   container.appendChild(adminBtn);
   document.body.appendChild(container);
 
@@ -539,6 +525,306 @@ function closeVideoIfOutside(e) {
    ========================================================================== */
 
 let deferredInstallPrompt = null;
+
+// ============================================================
+//  CHATBOT INTELLIGENT STANTECH
+// ============================================================
+function initChatbot() {
+  if (document.getElementById('stantech-chatbot')) return;
+
+  // Base de connaissances du chatbot
+  const knowledge = {
+    greetings: [
+      "Bonjour ! 👋 Je suis l'assistant virtuel de STANTECH CONSULTING. Comment puis-je vous aider ?",
+      "Bienvenue chez STANTECH ! 🚀 Je suis là pour répondre à vos questions sur nos services, produits et solutions.",
+      "Salut ! 😊 Je suis Stan, l'assistant IA de STANTECH. Posez-moi vos questions !"
+    ],
+    services: {
+      keywords: ['service', 'prestation', 'offre', 'expertise', 'que faites', 'quoi faire', 'proposez'],
+      response: `🛠️ **Nos services couvrent :**\n\n• **Développement Web & Mobile** — Sites vitrines, e-commerce, apps iOS/Android\n• **Cybersécurité** — Audit, pentest, protection des données\n• **IoT Industriel** — Capteurs connectés, automatisation\n• **Vidéosurveillance** — Installation et monitoring\n• **Réseaux & Systèmes** — Infrastructure, Cloud, maintenance\n• **Automatisation** — Scripts, workflows, bots\n\n👉 [Voir tous nos services](services.html)`
+    },
+    boutique: {
+      keywords: ['boutique', 'achat', 'acheter', 'produit', 'matériel', 'équipement', 'serveur', 'routeur', 'prix', 'tarif', 'commande', 'commander'],
+      response: `🛒 **Notre Boutique Tech** propose :\n\n• Serveurs professionnels\n• Passerelles IoT\n• Routeurs & Switches\n• Stations de travail\n• Équipements réseau certifiés\n\nTous nos produits sont livrés avec **garantie** au Cameroun et en Afrique.\n\n👉 [Accéder à la boutique](boutique.html)`
+    },
+    contact: {
+      keywords: ['contact', 'joindre', 'appeler', 'téléphone', 'email', 'mail', 'adresse', 'whatsapp', 'devis', 'rendez-vous'],
+      response: `📞 **Contactez-nous :**\n\n• 📱 WhatsApp : **+237 674 861 509**\n• 📧 Email : **contact@stantechconsulting.site**\n• 📍 Localisation : **Douala & Abidjan**\n\n💡 **1ère consultation IT offerte !**\n\n👉 [Formulaire de contact](contact.html)`
+    },
+    about: {
+      keywords: ['propos', 'qui êtes', 'fondateur', 'histoire', 'stantech', 'entreprise', 'société', 'équipe', 'miafo'],
+      response: `🏢 **STANTECH CONSULTING** est une entreprise fondée par l'ingénieur **MIAFO TSOPGNY STANIS AUDREY**, spécialisée dans les solutions numériques et technologiques.\n\n• 📅 Fondée en **septembre 2026**\n• 🎯 **120+ projets** livrés avec succès\n• 🌍 Présente au **Cameroun** et à l'**international**\n• ⭐ **98%** de clients satisfaits\n\n👉 [En savoir plus](a-propos.html)`
+    },
+    realisations: {
+      keywords: ['réalisation', 'projet', 'portfolio', 'travaux', 'référence', 'exemple'],
+      response: `🏆 **Nos réalisations incluent :**\n\n• Applications web et mobiles sur mesure\n• Systèmes IoT industriels\n• Infrastructures réseau d'entreprise\n• Plateformes SaaS\n• Systèmes de vidéosurveillance\n\nChaque projet est livré avec un suivi qualité rigoureux.\n\n👉 [Voir nos réalisations](realisations.html)`
+    },
+    applications: {
+      keywords: ['application', 'app', 'logiciel', 'saas', 'plateforme', 'web app', 'mobile app'],
+      response: `📱 **Notre écosystème d'applications :**\n\n• Applications web responsives\n• Apps mobiles natives (Android/iOS)\n• Applications desktop\n• Plateformes SaaS cloud\n• Solutions d'automatisation\n\n👉 [Découvrir nos applications](applications.html)`
+    },
+    livraison: {
+      keywords: ['livraison', 'livrer', 'expédition', 'délai', 'envoi', 'recevoir'],
+      response: `📦 **Livraison :**\n\n• 🇨🇲 **Cameroun** (Douala, Yaoundé, etc.) — 24 à 72h\n• 🇨🇮 **Côte d'Ivoire** (Abidjan) — 3 à 7 jours\n• 🌍 **International** — Sur devis\n\nTous nos produits sont livrés avec garantie et certificat d'authenticité.`
+    },
+    paiement: {
+      keywords: ['paiement', 'payer', 'moyen de paiement', 'mobile money', 'orange money', 'mtn'],
+      response: `💳 **Moyens de paiement acceptés :**\n\n• Mobile Money (MTN MoMo, Orange Money)\n• Virement bancaire\n• Paiement à la livraison (Douala)\n• PayPal (international)\n\nContactez-nous pour un devis personnalisé !`
+    },
+    default: "Je ne suis pas sûr de comprendre votre question. 🤔\n\nVoici ce que je peux vous aider avec :\n• 🛠️ **Services** — Nos expertises IT\n• 🛒 **Boutique** — Matériel technologique\n• 📞 **Contact** — Nous joindre\n• 🏢 **À propos** — Notre histoire\n• 🏆 **Réalisations** — Nos projets\n\nOu tapez votre question autrement !"
+  };
+
+  // Suggestions rapides
+  const quickReplies = [
+    { text: '🛠️ Services', query: 'Quels sont vos services ?' },
+    { text: '🛒 Boutique', query: 'Montrez-moi la boutique' },
+    { text: '📞 Contact', query: 'Comment vous contacter ?' },
+    { text: '🏢 À propos', query: 'Parlez-moi de STANTECH' },
+    { text: '📦 Livraison', query: 'Comment fonctionne la livraison ?' },
+    { text: '💳 Paiement', query: 'Quels moyens de paiement ?' }
+  ];
+
+  // Trouver la réponse appropriée
+  function findResponse(input) {
+    const lower = input.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    
+    // Salutations
+    if (/^(bonjour|salut|hello|hi|hey|bonsoir|coucou|yo|bjr|slt)/i.test(lower)) {
+      return knowledge.greetings[Math.floor(Math.random() * knowledge.greetings.length)];
+    }
+
+    // Remerciements
+    if (/merci|thanks|thank/i.test(lower)) {
+      return "Avec plaisir ! 😊 N'hésitez pas si vous avez d'autres questions. L'équipe STANTECH est toujours là pour vous.";
+    }
+
+    // Au revoir
+    if (/^(au revoir|bye|a\+|adieu|a bientot|bonne journee|bonne soiree)/i.test(lower)) {
+      return "Au revoir ! 👋 Merci de votre visite. N'hésitez pas à revenir ou à nous contacter directement sur WhatsApp !";
+    }
+
+    // Recherche dans les catégories
+    const categories = ['services', 'boutique', 'contact', 'about', 'realisations', 'applications', 'livraison', 'paiement'];
+    for (const cat of categories) {
+      const entry = knowledge[cat];
+      if (entry.keywords.some(kw => lower.includes(kw.normalize('NFD').replace(/[\u0300-\u036f]/g, '')))) {
+        return entry.response;
+      }
+    }
+
+    return knowledge.default;
+  }
+
+  // Formater le message (markdown basique -> HTML)
+  function formatMessage(text) {
+    return text
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\n/g, '<br>')
+      .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" style="color: #059669; text-decoration: underline;">$1</a>')
+      .replace(/• /g, '<span style="margin-left: 0.5rem;">• </span>');
+  }
+
+  // Créer le HTML du chatbot
+  const chatbotHtml = `
+    <div id="stantech-chatbot" class="chatbot-wrapper">
+      <!-- Bouton flottant -->
+      <button class="chatbot-fab" id="chatbot-fab" title="Discuter avec l'assistant STANTECH" aria-label="Ouvrir le chatbot">
+        <span class="chatbot-fab-badge">1</span>
+        <svg id="chatbot-fab-icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+        <svg id="chatbot-fab-icon-close" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <!-- Fenêtre de chat -->
+      <div class="chatbot-window" id="chatbot-window">
+        <div class="chatbot-header">
+          <div class="chatbot-header-info">
+            <div class="chatbot-avatar">
+              <img src="images/logos.png" alt="STANTECH Bot" onerror="this.style.display='none'">
+            </div>
+            <div>
+              <strong>Stan — Assistant STANTECH</strong>
+              <span class="chatbot-status"><span class="chatbot-online-dot"></span> En ligne</span>
+            </div>
+          </div>
+          <button class="chatbot-close" id="chatbot-close" aria-label="Fermer le chat">&times;</button>
+        </div>
+
+        <div class="chatbot-messages" id="chatbot-messages">
+          <!-- Messages dynamiques ici -->
+        </div>
+
+        <div class="chatbot-quick-replies" id="chatbot-quick-replies"></div>
+
+        <div class="chatbot-input-area">
+          <input type="text" id="chatbot-input" placeholder="Tapez votre message..." autocomplete="off">
+          <button id="chatbot-send" aria-label="Envoyer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.insertAdjacentHTML('beforeend', chatbotHtml);
+
+  // Références DOM
+  const fab = document.getElementById('chatbot-fab');
+  const window_ = document.getElementById('chatbot-window');
+  const closeBtn = document.getElementById('chatbot-close');
+  const messagesContainer = document.getElementById('chatbot-messages');
+  const input = document.getElementById('chatbot-input');
+  const sendBtn = document.getElementById('chatbot-send');
+  const quickRepliesContainer = document.getElementById('chatbot-quick-replies');
+  const fabBadge = fab.querySelector('.chatbot-fab-badge');
+  const iconOpen = document.getElementById('chatbot-fab-icon-open');
+  const iconClose = document.getElementById('chatbot-fab-icon-close');
+
+  let isOpen = false;
+  let isFirstOpen = true;
+
+  // Afficher les suggestions rapides
+  function renderQuickReplies() {
+    quickRepliesContainer.innerHTML = quickReplies.map(qr =>
+      `<button class="chatbot-quick-btn" data-query="${qr.query}">${qr.text}</button>`
+    ).join('');
+
+    quickRepliesContainer.querySelectorAll('.chatbot-quick-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const query = btn.getAttribute('data-query');
+        addMessage(query, 'user');
+        quickRepliesContainer.style.display = 'none';
+        setTimeout(() => {
+          addTypingIndicator();
+          setTimeout(() => {
+            removeTypingIndicator();
+            addMessage(findResponse(query), 'bot');
+            quickRepliesContainer.style.display = 'flex';
+          }, 800 + Math.random() * 600);
+        }, 300);
+      });
+    });
+  }
+
+  // Ajouter un message
+  function addMessage(text, type) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `chatbot-msg chatbot-msg-${type}`;
+
+    const now = new Date();
+    const time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+
+    if (type === 'bot') {
+      msgDiv.innerHTML = `
+        <div class="chatbot-msg-avatar">
+          <img src="images/logos.png" alt="Bot" onerror="this.style.display='none'">
+        </div>
+        <div class="chatbot-msg-content">
+          <div class="chatbot-msg-bubble">${formatMessage(text)}</div>
+          <span class="chatbot-msg-time">${time}</span>
+        </div>
+      `;
+    } else {
+      msgDiv.innerHTML = `
+        <div class="chatbot-msg-content">
+          <div class="chatbot-msg-bubble">${text}</div>
+          <span class="chatbot-msg-time">${time}</span>
+        </div>
+      `;
+    }
+
+    messagesContainer.appendChild(msgDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+
+  // Indicateur de frappe
+  function addTypingIndicator() {
+    const typing = document.createElement('div');
+    typing.className = 'chatbot-msg chatbot-msg-bot chatbot-typing';
+    typing.innerHTML = `
+      <div class="chatbot-msg-avatar">
+        <img src="images/logos.png" alt="Bot" onerror="this.style.display='none'">
+      </div>
+      <div class="chatbot-msg-content">
+        <div class="chatbot-msg-bubble chatbot-typing-bubble">
+          <span class="typing-dot"></span>
+          <span class="typing-dot"></span>
+          <span class="typing-dot"></span>
+        </div>
+      </div>
+    `;
+    messagesContainer.appendChild(typing);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+
+  function removeTypingIndicator() {
+    const typing = messagesContainer.querySelector('.chatbot-typing');
+    if (typing) typing.remove();
+  }
+
+  // Envoyer un message
+  function handleSend() {
+    const text = input.value.trim();
+    if (!text) return;
+
+    addMessage(text, 'user');
+    input.value = '';
+    quickRepliesContainer.style.display = 'none';
+
+    setTimeout(() => {
+      addTypingIndicator();
+      setTimeout(() => {
+        removeTypingIndicator();
+        addMessage(findResponse(text), 'bot');
+        quickRepliesContainer.style.display = 'flex';
+      }, 600 + Math.random() * 800);
+    }, 300);
+  }
+
+  // Toggle chatbot
+  function toggleChatbot() {
+    isOpen = !isOpen;
+    window_.classList.toggle('open', isOpen);
+    iconOpen.style.display = isOpen ? 'none' : 'block';
+    iconClose.style.display = isOpen ? 'block' : 'none';
+    fabBadge.style.display = 'none';
+
+    if (isOpen && isFirstOpen) {
+      isFirstOpen = false;
+      setTimeout(() => {
+        addMessage(knowledge.greetings[0], 'bot');
+        renderQuickReplies();
+      }, 400);
+    }
+
+    if (isOpen) {
+      setTimeout(() => input.focus(), 300);
+    }
+  }
+
+  // Événements
+  fab.addEventListener('click', toggleChatbot);
+  closeBtn.addEventListener('click', toggleChatbot);
+  sendBtn.addEventListener('click', handleSend);
+  input.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') handleSend();
+  });
+
+  // Animation du badge après 4 secondes
+  setTimeout(() => {
+    if (!isOpen) {
+      fabBadge.style.display = 'flex';
+    }
+  }, 4000);
+}
+
 
 function initPWA() {
   // Enregistrement du Service Worker
