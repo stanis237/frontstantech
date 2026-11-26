@@ -45,7 +45,7 @@ window.STANTECH_CONFIG = {
   API_BASE_URL: API_BASE_URL,
   WHATSAPP_NUMBER: '+237674861509',
   WHATSAPP_RAW: '237674861509',
-  CONTACT_EMAIL: 'contact@stantechconsulting.com',
+  CONTACT_EMAIL: 'contact@stantechconsulting.site',
   COMPANY_NAME: 'STANTECH CONSULTING',
   SLOGAN: 'Une idée, une solution numérique intelligente qui répond à votre besoin.'
 };
